@@ -8,19 +8,20 @@ Laptop Layout: | ctrl ^ | option ⌥ | CMD ⌘ |
                 `-------'----------'-------'
 ```
 
-| Key Seq | Result |
-|--------|--------|
+| Key Seq | Result | Emacs Binding | 
+|--------|--------|--- | 
 | ⌘ ⇧ p | Command Pallet |
 | ^ `   | Toggle Open Terminal |
 | ⌘ 0   | Focus Side Drawer |
 | ⌘ 1   | Focus Editor |
 | ⌘ b   | Toggle Side Drawer |
 | ⌘ p   | Search for file and open |
-| ⌘ b   | Search for Symbol |
+| ⌘ t   | Search for Tag |
 | ⌘ w   | Close Editor |
 | ⌘ →   | Split Editor 2 windows |
 | ⌘ ←   | Back to one window |
 | ⌘ ,   | Open Settings |
+| ⌘ k   | Clear Terminal | ^ l |
 
 ```
 CMD⌘   -> Shift -> P = Command Pallet
