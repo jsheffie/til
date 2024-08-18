@@ -1,16 +1,26 @@
 [Master VS Code's keyboard shortcuts in 13 minutes](https://www.youtube.com/watch?v=nWIRJBCjls8)
 
 ```
-                .-----.--------.----.
-               |  ^   |   ⌥    |  ⌘  |
-Laptop Layout: | ctrl | option | CMD | 
-                `-----'--------'----'
+               .-------------.   
+               | Shift ⇧     |  
+               |--------.----'-----.-------.
+Laptop Layout: | ctrl ^ | option ⌥ | CMD ⌘ | 
+                `-------'----------'-------'
 ```
 
-```
-Windows: CMD⌘    == Ctrl
-         option == Alt
-```
+| Key Seq | Result |
+|--------|--------|
+| ⌘ ⇧ p | Command Pallet |
+| ^ `   | Toggle Open Terminal |
+| ⌘ 0   | Focus Side Drawer |
+| ⌘ 1   | Focus Editor |
+| ⌘ b   | Toggle Side Drawer |
+| ⌘ p   | Search for file and open |
+| ⌘ b   | Search for Symbol |
+| ⌘ w   | Close Editor |
+| ⌘ →   | Split Editor 2 windows |
+| ⌘ ←   | Back to one window |
+| ⌘ ,   | Open Settings |
 
 ```
 CMD⌘   -> Shift -> P = Command Pallet
@@ -68,4 +78,12 @@ shift ⌘ ] = toggle between terminals
 ^ `       = hide terminal
 ^ tab     = switch to different files
 ⌘ w       = close file
+```
+
+
+    
+
+```
+Windows: CMD⌘    == Ctrl
+         option == Alt
 ```
