@@ -11,5 +11,5 @@ I do most of my work in containers these days, so to
 spin up new django container and running bash command you can do
 
 ```
-docker compose --file=local.yml run --rm  django python manage.py makemigrations --empty checklists
+docker compose --file=local.yml run --rm  django python manage.py makemigrations --empty django-app-name
 ```
