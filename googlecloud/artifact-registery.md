@@ -97,4 +97,9 @@ $ docker tag ffmpeg-7.1-ubuntu2404-desktop-build:latest us-central1-docker.pkg.d
 push it
 $ docker push us-central1-docker.pkg.dev/$GCP_PROJECT_NAME/docker-repo/ffmpeg-7.1-ubuntu2404-desktop-build:1.0.0
 
+For a subdirectory 
+$ docker tag ffmpeg-7.1-ubuntu2404-desktop-build:latest us-central1-docker.pkg.dev/$GCP_PROJECT_NAME/docker-repo/subdir_name:1.0.1
+
+$ docker push us-central1-docker.pkg.dev/$GCP_PROJECT_NAME/docker-repo/subdir_name:1.0.1
+
 ```
