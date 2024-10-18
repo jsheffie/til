@@ -305,3 +305,4 @@ Sources:
 - https://html-online.com/articles/colored-icon-characters-copy-paste/
 - https://www.vertex42.com/ExcelTips/unicode-symbols.html
 
+🥑

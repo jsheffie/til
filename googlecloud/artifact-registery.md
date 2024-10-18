@@ -103,3 +103,14 @@ $ docker tag ffmpeg-7.1-ubuntu2404-desktop-build:latest us-central1-docker.pkg.d
 $ docker push us-central1-docker.pkg.dev/$GCP_PROJECT_NAME/docker-repo/subdir_name:1.0.1
 
 ```
+
+
+[Transition from Container Registry](https://cloud.google.com/artifact-registry/docs/transition/transition-from-gcr)
+
+[Check for Container Registry usage](https://cloud.google.com/artifact-registry/docs/transition/check-gcr-usage)
+```sh
+gcloud container images list-gcr-usage \
+    --project=PROJECT
+
+gcloud artifacts docker images list us-central1-docker.pkg.dev/$GCP_PROJECT_NAME/docker-repo
+```
