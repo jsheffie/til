@@ -1,0 +1,2 @@
+- [cloudskillsboost](https://www.cloudskillsboost.google/)
+- [yt qwiklabs-courses2043](https://www.youtube.com/@qwiklabs-courses2043/playlists)

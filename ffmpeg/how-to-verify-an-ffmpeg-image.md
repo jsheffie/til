@@ -1,6 +1,15 @@
 ```
+ubuntu2404
+        Build
 $ ./update.py; time docker build --no-cache --platform linux/amd64 -t ffmpeg-7.1-ubuntu2404-desktop-build docker-images/7.1/ubuntu2404
+        Run
+$ docker run -it --rm --entrypoint=bash --platform="linux/amd64" ffmpeg-7.1-ubuntu2404-desktop-build:latest
+
+ubuntu2404-edge
+        Build
 $ ./update.py; time docker build --no-cache --platform linux/amd64 -t ffmpeg-7.1-ubuntu2404-edge-desktop-build docker-images/7.1/ubuntu2404-edge
+        Run
+$ docker run -it --rm --entrypoint=bash --platform="linux/amd64" ffmpeg-7.1-ubuntu2404-edge-desktop-build:latest
 
 nvidia2204
 vaapi2404

@@ -3,6 +3,8 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+googlecloud/Cloud_Developer_Training/Labs_Notes/tmpdelete
+
 # C extensions
 *.so
 

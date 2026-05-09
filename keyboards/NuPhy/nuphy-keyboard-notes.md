@@ -4,7 +4,6 @@ https://nuphy.com/collections/keyboards/products/halo75-v2-qmk-via-wireless-cust
 
 to bind the bluetooth
 had to press
-
 FN 1
 
 

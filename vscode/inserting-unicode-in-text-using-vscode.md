@@ -21,6 +21,8 @@ actually `CMD -> CTRL -> SPACE`
 ⌥ 
 ⌥
 
+⛔
+
 😎
 
 ☝️
@@ -306,3 +308,5 @@ Sources:
 - https://www.vertex42.com/ExcelTips/unicode-symbols.html
 
 🥑
+U+26D4
+

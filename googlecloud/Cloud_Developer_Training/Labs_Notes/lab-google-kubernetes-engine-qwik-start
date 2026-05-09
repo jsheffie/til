@@ -1,0 +1,90 @@
+## Labs Completed
+| Completed | Title | Location | 
+|--------|--------|---|
+
+| 11/01/2025 | [Google Kubernetes Engine: Qwik Start](https://www.skills.google/paths/19/course_templates/663/labs/592457) | PCDP -> 10 Deploy Kubernetes Applications on Google Cloud |
+
+
+```sh
+gcloud auth list
+gcloud config list project
+```
+
+### Task 1. Set a default compute zone
+Your [compute zone](https://cloud.google.com/compute/docs/regions-zones/#available) is an approximate regional location in which your clusters and their resources live. For example, us-central1-a is a zone in the us-central1 region.
+
+
+```sh
+export REGION=us-central1
+export ZONE=us-central1-a
+export REGION=us-west1
+export ZONE=us-west1-c
+
+gcloud config set compute/region ${REGION}
+gcloud config set compute/zone ${ZONE}
+```
+
+
+### Task 2. Create a GKE cluster
+A cluster consists of at least one cluster master machine and multiple worker machines called nodes. Nodes are Compute Engine virtual machine (VM) instances that run the Kubernetes processes necessary to make them part of the cluster.
+
+Note: Cluster names must start with a letter and end with an alphanumeric, and cannot be longer than 40 characters.
+
+```sh
+gcloud container clusters create --machine-type=e2-medium --zone=${ZONE} lab-cluster
+
+expected output
+Created [https://container.googleapis.com/v1/projects/qwiklabs-gcp-03-18f986a3f3be/zones/us-west1-c/clusters/lab-cluster].
+To inspect the contents of your cluster, go to: https://console.cloud.google.com/kubernetes/workload_/gcloud/us-west1-c/lab-cluster?project=qwiklabs-gcp-03-18f986a3f3be
+kubeconfig entry generated for lab-cluster.
+NAME: lab-cluster
+LOCATION: us-west1-c
+MASTER_VERSION: 1.33.5-gke.1162000
+MASTER_IP: 34.82.168.185
+MACHINE_TYPE: e2-medium
+NODE_VERSION: 1.33.5-gke.1162000
+NUM_NODES: 3
+STATUS: RUNNING
+STACK_TYPE: IPV4
+```
+
+### Task 3. Get authentication credentials for the cluster
+
+```sh
+gcloud container clusters get-credentials lab-cluster
+```
+
+### Task 4. Deploy an application to the cluster
+To create a new Deployment hello-server from the hello-app container image, run the following kubectl create command:
+
+```sh
+kubectl create deployment hello-server --image=gcr.io/google-samples/hello-app:1.0
+```
+
+To create a Kubernetes Service, which is a Kubernetes resource that lets you expose your application to external traffic, run the following kubectl expose command:
+
+```sh
+kubectl expose deployment hello-server --type=LoadBalancer --port 8080
+```
+
+To inspect the hello-server Service, run kubectl get:
+
+```sh
+kubectl get service
+
+NAME           TYPE           CLUSTER-IP       EXTERNAL-IP    PORT(S)          AGE
+hello-server   LoadBalancer   34.118.231.166   35.230.14.51   8080:30093/TCP   51s
+kubernetes     ClusterIP      34.118.224.1     <none>         443/TCP          8m3s
+```
+
+open browser
+```sh
+http://[EXTERNAL-IP]:8080
+http://35.230.14.51:8080
+```
+
+### Task 5. Delete the cluster
+
+```sh
+gcloud container clusters delete lab-cluster
+```

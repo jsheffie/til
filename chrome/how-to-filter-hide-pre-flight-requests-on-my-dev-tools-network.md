@@ -18,3 +18,7 @@ http://jds.local.me:8000/api/ -method:OPTIONS
 ```
 
 [source](https://stackoverflow.com/questions/35567580/how-to-filter-hide-pre-flight-requests-on-my-dev-tools-network)
+
+
+## Chrome inverted filter's that I use to squash noise.
+google-analytics && identity && ingest && googleapi

@@ -1,0 +1,2 @@
+- [Firestore pricing](https://cloud.google.com/firestore/pricing)
+- [YouTube - Google for Developers](https://www.youtube.com/@GoogleDevelopers)

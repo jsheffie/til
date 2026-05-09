@@ -1,0 +1,200 @@
+[
+    {
+        "library_name": "libogg",
+        "download_url": "https://downloads.xiph.org/releases/ogg/libogg-1.3.5.tar.gz",
+        "build_dir": "/tmp/libogg",
+        "tarball_name": "libogg-1.3.5.tar.gz"
+    },
+    {
+        "library_name": "libopencore-amr",
+        "download_url": "https://sourceforge.net/projects/opencore-amr/files/opencore-amr/opencore-amr-0.1.6.tar.gz",
+        "build_dir": "/tmp/libopencore-amr",
+        "tarball_name": "opencore-amr-0.1.6.tar.gz"
+    },
+    {
+        "library_name": "libx264",
+        "download_url": "https://download.videolan.org/pub/videolan/x264/snapshots/x264-snapshot-20191217-2245-stable.tar.bz2",
+        "build_dir": "/tmp/x264",
+        "tarball_name": "x264-snapshot-20191217-2245-stable.tar.bz2"
+    },
+    {
+        "library_name": "libx265",
+        "download_url": "http://ftp.videolan.org/pub/videolan/x265/x265_4.0.tar.gz",
+        "build_dir": "/tmp/x265",
+        "tarball_name": "x265_4.0.tar.gz"
+    },
+    {
+        "library_name": "libopus",
+        "download_url": "https://github.com/xiph/opus/releases/download/v1.5.2/opus-1.5.2.tar.gz",
+        "build_dir": "/tmp/opus",
+        "tarball_name": "opus-1.5.2.tar.gz"
+    },
+    {
+        "library_name": "libvoribs",
+        "download_url": "http://downloads.xiph.org/releases/vorbis/libvorbis-1.3.7.tar.gz",
+        "build_dir": "/tmp/vorbis",
+        "tarball_name": "libvorbis-1.3.7.tar.gz"
+    },
+    {
+        "library_name": "libvpx",
+        "download_url": "https://chromium.googlesource.com/webm/libvpx.git/+archive/v1.14.1.tar.gz",
+        "build_dir": "/tmp/vpx",
+        "tarball_name": "vpx-v1.14.1.tar.gz"
+    },
+    {
+        "library_name": "libwebp",
+        "download_url": "https://storage.googleapis.com/downloads.webmproject.org/releases/webp/libwebp-1.4.0.tar.gz",
+        "build_dir": "/tmp/webp",
+        "tarball_name": "libwebp-1.4.0.tar.gz"
+    },
+    {
+        "library_name": "libmp3lame",
+        "download_url": "https://sourceforge.net/projects/lame/files/lame/3.100/lame-3.100.tar.gz",
+        "build_dir": "/tmp/lame",
+        "tarball_name": "lame-3.100.tar.gz"
+    },
+    {
+        "library_name": "libxvid",
+        "download_url": "https://downloads.xvid.com/downloads/xvidcore-1.3.7.tar.gz",
+        "build_dir": "/tmp/xvid",
+        "tarball_name": "xvidcore-1.3.7.tar.gz"
+    },
+    {
+        "library_name": "libfdk-aac",
+        "download_url": "https://github.com/mstorsjo/fdk-aac/archive/refs/tags/v2.0.3.tar.gz",
+        "build_dir": "/tmp/fdk-aac",
+        "tarball_name": "fdk-aac-2.0.3.tar.gz"
+    },
+    {
+        "library_name": "openjpeg",
+        "download_url": "https://github.com/uclouvain/openjpeg/archive/refs/tags/v2.5.2.tar.gz",
+        "build_dir": "/tmp/openjpeg",
+        "tarball_name": "openjpeg-2.5.2.tar.gz"
+    },
+    {
+        "library_name": "freetype",
+        "download_url": "http://download.savannah.gnu.org/releases/freetype/freetype-2.13.3.tar.gz",
+        "build_dir": "/tmp/freetype",
+        "tarball_name": "freetype-2.13.3.tar.gz"
+    },
+    {
+        "library_name": "libvidstab",
+        "download_url": "https://github.com/georgmartius/vid.stab/archive/v1.1.1.tar.gz",
+        "build_dir": "/tmp/vid.stab",
+        "tarball_name": "vid.stab-1.1.1.tar.gz"
+    },
+    {
+        "library_name": "fribidi",
+        "download_url": "https://github.com/fribidi/fribidi/archive/refs/tags/v1.0.16.tar.gz",
+        "build_dir": "/tmp/fribidi",
+        "tarball_name": "fribidi-1.0.16.tar.gz"
+    },
+    {
+        "library_name": "fontconfig",
+        "download_url": "https://www.freedesktop.org/software/fontconfig/release/fontconfig-2.15.0.tar.gz",
+        "build_dir": "/tmp/fontconfig",
+        "tarball_name": "fontconfig-2.15.0.tar.gz"
+    },
+    {
+        "library_name": "libass",
+        "download_url": "https://github.com/libass/libass/releases/download/0.17.3/libass-0.17.3.tar.gz",
+        "build_dir": "/tmp/libass",
+        "tarball_name": "libass-0.17.3.tar.gz"
+    },
+    {
+        "library_name": "kvazaar",
+        "download_url": "https://github.com/ultravideo/kvazaar/releases/download/v2.3.1/kvazaar-2.3.1.tar.gz",
+        "build_dir": "/tmp/kvazaar",
+        "tarball_name": "kvazaar-2.3.1.tar.gz"
+    },
+    {
+        "library_name": "libsvtav1",
+        "download_url": "https://gitlab.com/AOMediaCodec/SVT-AV1/-/archive/v2.2.1/SVT-AV1-v2.2.1.tar.gz",
+        "build_dir": "/tmp/libsvtav1",
+        "tarball_name": "SVT-AV1-v2.2.1.tar.gz"
+    },
+    {
+        "library_name": "xorg-macros",
+        "download_url": "https://www.x.org/releases/individual/util/util-macros-1.20.1.tar.xz",
+        "build_dir": "/tmp/xorg-macros",
+        "tarball_name": "util-macros-1.20.1.tar.xz"
+    },
+    {
+        "library_name": "xproto",
+        "download_url": "https://www.x.org/releases/individual/proto/xproto-7.0.31.tar.gz",
+        "build_dir": "/tmp/xproto",
+        "tarball_name": "xproto-7.0.31.tar.gz"
+    },
+    {
+        "library_name": "libxau",
+        "download_url": "https://www.x.org/releases/individual/lib/libXau-1.0.11.tar.xz",
+        "build_dir": "/tmp/libXau",
+        "tarball_name": "libXau-1.0.11.tar.xz"
+    },
+    {
+        "library_name": "libpthread-stubs",
+        "download_url": "https://www.x.org/releases/individual/lib/libpthread-stubs-0.5.tar.xz",
+        "build_dir": "/tmp/libpthread-stubs",
+        "tarball_name": "libpthread-stubs-0.5.tar.xz"
+    },
+    {
+        "library_name": "libxml2",
+        "download_url": "https://gitlab.gnome.org/GNOME/libxml2/-/archive/v2.13.4/libxml2-v2.13.4.tar.gz",
+        "build_dir": "/tmp/libxml2",
+        "tarball_name": "libxml2-2.13.4.tar.gz"
+    },
+    {
+        "library_name": "libbluray",
+        "download_url": "https://download.videolan.org/pub/videolan/libbluray/1.3.4/libbluray-1.3.4.tar.bz2",
+        "build_dir": "/tmp/libbluray",
+        "tarball_name": "libbluray-1.3.4.tar.bz2"
+    },
+    {
+        "library_name": "libzmq",
+        "download_url": "https://github.com/zeromq/libzmq/releases/download/v4.3.5/zeromq-4.3.5.tar.gz",
+        "build_dir": "/tmp/libzmq",
+        "tarball_name": "zeromq-4.3.5.tar.gz"
+    },
+    {
+        "library_name": "libpng",
+        "download_url": "https://download.sourceforge.net/libpng/libpng-1.6.44.tar.xz",
+        "build_dir": "/tmp/libpng",
+        "tarball_name": "libpng-1.6.44.tar.xz"
+    },
+    {
+        "library_name": "libaribb24",
+        "download_url": "https://github.com/nkoriyama/aribb24/archive/refs/tags/v1.0.3.tar.gz",
+        "build_dir": "/tmp/b24",
+        "tarball_name": "aribb24-v1.0.3.tar.gz"
+    },
+    {
+        "library_name": "zimg",
+        "download_url": "https://github.com/sekrit-twc/zimg/archive/refs/tags/release-3.0.5.tar.gz",
+        "build_dir": "/tmp/zimg",
+        "tarball_name": "zimg-3.0.5.tar.gz"
+    },
+    {
+        "library_name": "libtheora",
+        "download_url": "https://downloads.xiph.org/releases/theora/libtheora-1.1.1.tar.gz",
+        "build_dir": "/tmp/theora",
+        "tarball_name": "libtheora-1.1.1.tar.gz"
+    },
+    {
+        "library_name": "libsrt",
+        "download_url": "https://github.com/Haivision/srt/archive/refs/tags/v1.5.3.tar.gz",
+        "build_dir": "/tmp/srt",
+        "tarball_name": "srt-v1.5.3.tar.gz"
+    },
+    {
+        "library_name": "libvmaf",
+        "download_url": "https://github.com/Netflix/vmaf/archive/refs/tags/v3.0.0.tar.gz",
+        "build_dir": "/tmp/vmaf",
+        "tarball_name": "vmaf-v3.0.0.tar.gz"
+    },
+    {
+        "library_name": "ffmpeg",
+        "download_url": "https://ffmpeg.org/releases/ffmpeg-7.1.tar.bz2",
+        "build_dir": "/tmp/ffmpeg",
+        "tarball_name": "ffmpeg-7.1.tar.bz2"
+    }
+]
