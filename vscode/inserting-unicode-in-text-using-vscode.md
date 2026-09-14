@@ -13,6 +13,8 @@ First install the vscode extension **Insert Unicode** by brunnerh
 
  rince and repeat
 
+
+
 actually `CMD -> CTRL -> SPACE`
 ( technical symbnols has the PLACE OF INTEREST symbol as well. )
 
@@ -20,11 +22,21 @@ actually `CMD -> CTRL -> SPACE`
 ⎇
 ⌥ 
 ⌥
+⇥
+⇥
+🛫
+✈
+🛩
+🛬
+⚾ 
+✈️
 
+🍕
 ⛔
 
 😎
-
+🤠
+🐄
 ☝️
 👆
 https://gist.github.com/datawookie/fca41cba27f012e8196b736bc821f8fc
@@ -35,6 +47,9 @@ https://github.com/muan/unicode-emoji-json
 
 🇿🇦
 🇬🇧
+🗒️
+✏️
+👓
 
 🛜 — wireless
 🔗 — link
@@ -120,6 +135,9 @@ https://github.com/muan/unicode-emoji-json
 ⚙ — gear
 🧹 — broom
 🚪 — door
+🧘‍♂️ - yoga m
+🧘‍♀️ - yoga w
+🌱 - grass
 
 ← — arrow left (single)
 → — arrow right (single)
