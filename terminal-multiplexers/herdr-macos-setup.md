@@ -102,6 +102,56 @@ description = "open file viewer in tab"
 `prefix+f` opens the file viewer in a split; `prefix+shift+f` opens it in a
 new tab.
 
+See [`herdr-configuration-notes.md`](./herdr-configuration-notes.md) for
+renderer/diff configuration, the git-review keybindings, and why untracked
+files show no diffs.
+
+## Agent Skill
+
+Herdr ships a skill file that teaches a coding agent to drive Herdr from
+inside a Herdr-managed pane — inspecting workspaces/tabs/panes, splitting
+panes, reading pane output, waiting on servers or tests, and starting helper
+agents in sibling panes.
+
+```bash
+npx skills add herdrdev/herdr --skill herdr -g
+```
+
+The org is **`herdrdev`**, not `herderdev`. The wrong spelling 404s, and
+`npx skills` reports it as `Authentication failed ... For private repos,
+ensure you have access`, which points at credentials rather than the typo.
+
+`-g` installs globally; omit it to install into the current project only.
+Installs to `~/.agents/skills/herdr/SKILL.md`, symlinked from
+`~/.claude/skills/herdr`.
+
+The skill guards on `HERDR_ENV=1` — outside a Herdr pane the agent stops and
+says so. So start the agent inside Herdr:
+
+```bash
+herdr
+claude
+```
+
+Note that `--skill herdr` names a skill that exists only as a released
+artifact; the repo's own `.agents/skills/` holds unrelated internal dev
+skills (`herdr-pre-release-audit`, `herdr-throwaway-repro`, `triage`). If
+Herdr is already installed, `herdr --skill` prints the copy matching your
+binary. Manual fallback:
+[`skills/herdr/SKILL.md`](https://github.com/herdrdev/herdr/blob/master/skills/herdr/SKILL.md).
+
+Separately, [`herdr.dev/agent-guide.md`](https://herdr.dev/agent-guide.md) is
+for an agent *teaching a human* to set up Herdr — the skill is for an agent
+*operating* Herdr.
+
+## Videos
+
+- [Herdr: Why Developers Are Replacing Tmux with AI Agents](https://www.youtube.com/watch?v=7W_H9313DHQ)
+  — Damian Galarza
+
+See [`terminal-multiplexers.md`](./terminal-multiplexers.md) for more
+third-party Herdr videos.
+
 ## Why Herdr (context)
 
 Chosen over alternatives (tmux, Screen, dvtm, Byobu, cmux, Superlogical) for

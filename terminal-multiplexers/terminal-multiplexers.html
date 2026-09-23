@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Terminal Multiplexers Comparison</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --fg: #1a1a1a;
+    --muted: #666;
+    --border: #d8d8d8;
+    --head-bg: #f4f4f5;
+    --row-alt: #fafafa;
+    --link: #0a58ca;
+    --yes: #0f7b3d;
+    --no: #b3261e;
+    --warn: #8a6100;
+    --note-bg: #fff8e6;
+    --note-border: #e0b64a;
+    --pick-bg: #eef7f0;
+    --pick-border: #0f7b3d;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #17181a;
+      --fg: #e9e9ea;
+      --muted: #a0a0a4;
+      --border: #34363a;
+      --head-bg: #202226;
+      --row-alt: #1c1d20;
+      --link: #78aeff;
+      --yes: #57d98a;
+      --no: #ff8a80;
+      --warn: #e8bb52;
+      --note-bg: #2a2417;
+      --note-border: #7a6122;
+      --pick-bg: #16241b;
+      --pick-border: #2f7d4c;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 2rem 1.25rem 4rem;
+    background: var(--bg);
+    color: var(--fg);
+    font: 15px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  }
+  main { max-width: 1400px; margin: 0 auto; }
+  h1 { font-size: 1.85rem; margin: 0 0 .35rem; letter-spacing: -.02em; }
+  h2 { font-size: 1.2rem; margin: 2.5rem 0 .75rem; letter-spacing: -.01em; }
+  .sub { color: var(--muted); margin: 0 0 1.5rem; }
+  a { color: var(--link); }
+  a:hover { text-decoration: none; }
+  .note {
+    background: var(--note-bg);
+    border-left: 4px solid var(--note-border);
+    padding: .85rem 1rem;
+    border-radius: 0 6px 6px 0;
+    margin: 0 0 1.75rem;
+    font-size: .92rem;
+  }
+  .scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  table { border-collapse: collapse; width: 100%; font-size: .87rem; }
+  th, td {
+    border: 1px solid var(--border);
+    padding: .55rem .7rem;
+    text-align: left;
+    vertical-align: top;
+  }
+  thead th {
+    background: var(--head-bg);
+    position: sticky;
+    top: 0;
+    white-space: nowrap;
+    font-size: .9rem;
+  }
+  tbody th {
+    background: var(--head-bg);
+    white-space: nowrap;
+    font-weight: 600;
+    position: sticky;
+    left: 0;
+  }
+  tbody tr:nth-child(even) td { background: var(--row-alt); }
+  td small { color: var(--muted); }
+  .yes { color: var(--yes); font-weight: 600; }
+  .no  { color: var(--no);  font-weight: 600; }
+  .warn{ color: var(--warn); font-weight: 600; }
+  .linkcell { line-height: 1.9; }
+  .pick {
+    background: var(--pick-bg);
+    border-left: 4px solid var(--pick-border);
+    padding: 1rem 1.15rem;
+    border-radius: 0 6px 6px 0;
+    margin: 1rem 0;
+  }
+  .pick h3 { margin: 0 0 .5rem; font-size: 1.05rem; }
+  ul { margin: .5rem 0; padding-left: 1.3rem; }
+  li { margin: .3rem 0; }
+  footer { margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid var(--border); color: var(--muted); font-size: .87rem; }
+  @media (max-width: 700px) {
+    body { padding: 1.25rem .75rem 3rem; }
+    thead th, tbody th { position: static; }
+  }
+</style>
+</head>
+<body>
+<main>
+
+<h1>Terminal Multiplexers Comparison</h1>
+<p class="sub">Ordered oldest &rarr; newest by first release.</p>
+
+<div class="note">
+  <strong>Sourcing note:</strong> Cells marked <em>(unverified)</em> come from secondary blog coverage
+  that could not be confirmed against a primary source. Superlogical is in closed beta with no public
+  code, so its architecture claims are the company's own and are not independently checked.
+</div>
+
+<div class="scroll">
+<table>
+  <thead>
+    <tr>
+      <th>Feature</th>
+      <th>GNU Screen</th>
+      <th>tmux</th>
+      <th>dvtm</th>
+      <th>Byobu</th>
+      <th>cmux</th>
+      <th>Herdr</th>
+      <th>Superlogical</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Links</th>
+      <td><a href="https://www.gnu.org/software/screen/">gnu.org</a><br><a href="https://git.savannah.gnu.org/cgit/screen.git">git</a></td>
+      <td><a href="https://github.com/tmux/tmux">GitHub</a><br><a href="https://github.com/tmux/tmux/wiki">wiki</a></td>
+      <td><a href="https://www.brain-dump.org/projects/dvtm/">brain-dump.org</a><br><a href="https://github.com/martanne/dvtm">GitHub</a></td>
+      <td><a href="https://byobu.org/">byobu.org</a><br><a href="https://github.com/dustinkirkland/byobu">GitHub</a></td>
+      <td><a href="https://github.com/manaflow-ai/cmux">GitHub</a></td>
+      <td><a href="https://herdr.dev">herdr.dev</a><br><a href="https://github.com/herdrdev/herdr">GitHub</a></td>
+      <td><a href="https://www.superlogical.com">superlogical.com</a><br><a href="https://x.com/superlogical">@superlogical</a></td>
+    </tr>
+    <tr>
+      <th>First Release</th>
+      <td>1987</td>
+      <td>Nov 20, 2007</td>
+      <td>Dec 8, 2007</td>
+      <td>2009 (as screen-profiles, Dec 2008)</td>
+      <td>Jan 28, 2026 (repo);<br>Feb 12, 2026 (release)</td>
+      <td>Mar 27, 2026 (repo);<br>Aug 3, 2026 (v0.8.0)</td>
+      <td>Announced Jul 2026 (closed beta)</td>
+    </tr>
+    <tr>
+      <th>Open Source</th>
+      <td>Yes (GPL-3.0-or-later)</td>
+      <td>Yes (ISC)</td>
+      <td>Yes (MIT/X11)</td>
+      <td>Yes (GPL-3.0)</td>
+      <td>GPL-3.0 + commercial option (auto-detect: NOASSERTION)</td>
+      <td>Yes (Apache-2.0;<br>was AGPL-3.0)</td>
+      <td><strong>No</strong> — proprietary;<br>OSS pieces promised</td>
+    </tr>
+    <tr>
+      <th>Maintained?</th>
+      <td>Yes, slowly (v5.0.2)</td>
+      <td>Yes, active</td>
+      <td><strong>Dormant</strong> — last commit Mar 2021, last release v0.15 (2016)</td>
+      <td>Yes, active (last push Sep 2026)</td>
+      <td>Yes, active</td>
+      <td>Yes, very active</td>
+      <td>Pre-release</td>
+    </tr>
+    <tr>
+      <th>macOS</th>
+      <td>Ships as <code>/usr/bin/screen</code> but <strong>v4.00.03 from 2006</strong></td>
+      <td>Yes (Homebrew;<br><strong>not</strong> preinstalled)</td>
+      <td>Source only, no Homebrew formula</td>
+      <td>Yes (Homebrew v7.19)</td>
+      <td><strong>Yes — macOS only</strong></td>
+      <td>Yes</td>
+      <td>Yes (native app)</td>
+    </tr>
+    <tr>
+      <th>Linux</th>
+      <td>Yes, universal</td>
+      <td>Yes</td>
+      <td>Yes (Debian/Ubuntu)</td>
+      <td>Yes (Ubuntu default)</td>
+      <td><strong>No</strong></td>
+      <td>Yes (incl. WSL)</td>
+      <td>Not confirmed</td>
+    </tr>
+    <tr>
+      <th>Primary Focus</th>
+      <td>Original persistent sessions</td>
+      <td>Human-centric persistent sessions</td>
+      <td>Minimal, dwm-style tiling</td>
+      <td>Status-bar UX layer over tmux/screen</td>
+      <td>Running multiple AI agents on macOS</td>
+      <td>AI coding agent runtime &amp;<br>monitoring</td>
+      <td>Human+AI unified sessions, multi-device</td>
+    </tr>
+    <tr>
+      <th>Written In</th>
+      <td>C</td>
+      <td>C</td>
+      <td>C</td>
+      <td>Shell/Python wrapper</td>
+      <td>Swift + AppKit (libghostty)</td>
+      <td>Rust</td>
+      <td>Unknown</td>
+    </tr>
+    <tr>
+      <th>AI Agent Awareness</th>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td><strong>High</strong></td>
+      <td><strong>High</strong> — panes marked working/blocked/idle</td>
+      <td>Claimed high <small>(unverified)</small></td>
+    </tr>
+    <tr>
+      <th>Agent-waiting notification</th>
+      <td><span class="no">&#10007;</span> Generic <code>monitor</code> bell, <strong>off by default</strong></td>
+      <td><span class="warn">&#9888;</span> <code>monitor-activity</code>/<code>monitor-silence</code> + hooks, DIY</td>
+      <td><span class="no">&#10007;</span></td>
+      <td><span class="warn">&#9888;</span> Turns backend monitoring <strong>on</strong> by default;<br>no agent concept</td>
+      <td><span class="yes">&#10003;</span> Blue ring on pane, tab lights up, <code>cmux notify</code> CLI, Cmd+Shift+U</td>
+      <td><span class="yes">&#10003;</span> <strong>Native</strong> — notifies when agent stops and needs input;<br>sound supported</td>
+      <td><span class="no">&#10007;</span> Pending</td>
+    </tr>
+    <tr>
+      <th>Architecture note</th>
+      <td>—</td>
+      <td>Text-escape sequence parser</td>
+      <td>—</td>
+      <td>Wraps tmux (default) or screen</td>
+      <td>Built on Ghostty&#x27;s engine</td>
+      <td>Terminal wrapper + socket API</td>
+      <td>Binary wire protocol over <code>libhosty</code> <small>(unverified)</small></td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h2>Your Requirement: Bell When an Agent Waits on Input</h2>
+<div class="scroll">
+<table>
+  <thead>
+    <tr><th>Tool</th><th>Meets it?</th><th>How</th></tr>
+  </thead>
+  <tbody>
+    <tr><th>Herdr</th><td><span class="yes">&#10003; Yes</span></td><td>Native. Marks panes blocked/idle, notifies on stop, sound support. Runs on macOS <strong>and</strong> Linux.</td></tr>
+    <tr><th>cmux</th><td><span class="warn">Yes, but</span></td><td>Native and well-designed &mdash; <strong>macOS only</strong>, so it fails your Linux requirement.</td></tr>
+    <tr><th>Superlogical</th><td><span class="no">&#10007; Not yet</span></td><td>Designed for human+AI work, but closed beta; no notification details published.</td></tr>
+    <tr><th>tmux</th><td><span class="warn">&#9888; DIY</span></td><td><code>monitor-silence</code> + hooks can approximate it, but you script and maintain it yourself.</td></tr>
+    <tr><th>Byobu</th><td><span class="warn">&#9888; DIY</span></td><td>Same as tmux underneath; better defaults, still no agent concept.</td></tr>
+    <tr><th>Screen / dvtm</th><td><span class="no">&#10007; No</span></td><td>Screen's bell is off by default and window-scoped; dvtm is dormant.</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2>Recommendation</h2>
+
+<div class="pick">
+  <h3>Herdr &mdash; the only option meeting all your constraints</h3>
+  <ul>
+    <li>&#10003; Native bell/notification when an agent is waiting on input</li>
+    <li>&#10003; Runs on <strong>both</strong> macOS and Linux</li>
+    <li>&#10003; Purpose-built for Claude Code and similar agents</li>
+    <li>&#10003; Open source (Apache-2.0), single Rust binary</li>
+    <li>&#10003; Actively developed</li>
+  </ul>
+</div>
+
+<p><strong>On your lean toward Superlogical:</strong> it's a strong team (Mitchell Hashimoto, of HashiCorp
+and Ghostty) and the vision fits what you want &mdash; but it is <strong>closed beta, proprietary, Linux
+support unconfirmed, and has no published notification mechanism</strong>. You cannot use it today, and its
+headline performance claims are unverifiable while the code is private. Worth watching; not worth waiting on.</p>
+
+<p><strong>cmux</strong> is the closest rival to Herdr on features and is worth a look if you ever work
+macOS-only &mdash; but it cannot cover your Linux machine.</p>
+
+<p><strong>tmux</strong> stays the safe fallback: universal, battle-tested, and you can hand-roll agent
+notifications with <code>monitor-silence</code> and hooks if you'd rather not adopt a young tool.</p>
+
+<h2>Videos</h2>
+
+<p>Third-party videos covering Herdr:</p>
+
+<ul>
+  <li><a href="https://www.youtube.com/watch?v=2CR9tDNAzB0&amp;t=329s">herdr is a must use</a> &mdash; Academind</li>
+  <li><a href="https://www.youtube.com/watch?v=qnIu-Xu64H0&amp;t=14s">Herdr in about 6 minutes</a> &mdash; Jilles</li>
+</ul>
+
+<footer>
+  <strong>Notes &amp; caveats</strong>
+  <ul>
+    <li>macOS ships an ancient Screen (4.00.03, 2006) and does <strong>not</strong> ship tmux &mdash; both need Homebrew for current versions.</li>
+    <li>dvtm is effectively abandoned; included for completeness only.</li>
+    <li>Screen 5.0.2's exact release date and its status on macOS 26 (Tahoe) could not be confirmed.</li>
+    <li>Third-party blog comparisons of these tools are frequently AI-generated and carry wrong dates and star counts; prefer the repos linked above.</li>
+  </ul>
+</footer>
+
+</main>
+</body>
+</html>

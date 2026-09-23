@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hearing Aids: Soundly vs AirPods Pro 3</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --fg: #1a1a1a;
+    --muted: #666;
+    --border: #d8d8d8;
+    --head-bg: #f4f4f5;
+    --row-alt: #fafafa;
+    --link: #0a58ca;
+    --yes: #0f7b3d;
+    --no: #b3261e;
+    --warn: #8a6100;
+    --note-bg: #fff8e6;
+    --note-border: #e0b64a;
+    --pick-bg: #eef7f0;
+    --pick-border: #0f7b3d;
+    --stop-bg: #fdeeec;
+    --stop-border: #b3261e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #17181a;
+      --fg: #e9e9ea;
+      --muted: #a0a0a4;
+      --border: #34363a;
+      --head-bg: #202226;
+      --row-alt: #1c1d20;
+      --link: #78aeff;
+      --yes: #57d98a;
+      --no: #ff8a80;
+      --warn: #e8bb52;
+      --note-bg: #2a2417;
+      --note-border: #7a6122;
+      --pick-bg: #16241b;
+      --pick-border: #2f7d4c;
+      --stop-bg: #2b1a18;
+      --stop-border: #8c3b33;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 2rem 1.25rem 4rem;
+    background: var(--bg);
+    color: var(--fg);
+    font: 15px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  }
+  main { max-width: 1100px; margin: 0 auto; }
+  h1 { font-size: 1.85rem; margin: 0 0 .35rem; letter-spacing: -.02em; }
+  h2 { font-size: 1.2rem; margin: 2.5rem 0 .75rem; letter-spacing: -.01em; }
+  h3 { font-size: 1.02rem; margin: 1.5rem 0 .5rem; }
+  .sub { color: var(--muted); margin: 0 0 1.5rem; }
+  a { color: var(--link); }
+  a:hover { text-decoration: none; }
+  .note, .pick, .stop {
+    padding: .85rem 1rem;
+    border-radius: 0 6px 6px 0;
+    margin: 0 0 1.75rem;
+    font-size: .92rem;
+  }
+  .note { background: var(--note-bg); border-left: 4px solid var(--note-border); }
+  .pick { background: var(--pick-bg); border-left: 4px solid var(--pick-border); }
+  .stop { background: var(--stop-bg); border-left: 4px solid var(--stop-border); }
+  .pick h3, .note h3, .stop h3 { margin: 0 0 .5rem; font-size: 1.05rem; }
+  .scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  table { border-collapse: collapse; width: 100%; font-size: .87rem; }
+  th, td {
+    border: 1px solid var(--border);
+    padding: .55rem .7rem;
+    text-align: left;
+    vertical-align: top;
+  }
+  thead th { background: var(--head-bg); white-space: nowrap; font-size: .9rem; }
+  tbody th { background: var(--head-bg); white-space: nowrap; font-weight: 600; }
+  tbody tr:nth-child(even) td { background: var(--row-alt); }
+  td small { color: var(--muted); }
+  .yes { color: var(--yes); font-weight: 600; }
+  .no  { color: var(--no);  font-weight: 600; }
+  .warn{ color: var(--warn); font-weight: 600; }
+  ul { margin: .5rem 0; padding-left: 1.3rem; }
+  li { margin: .3rem 0; }
+  ol { padding-left: 1.3rem; }
+  code { background: var(--head-bg); padding: .1rem .3rem; border-radius: 3px; font-size: .9em; }
+  blockquote {
+    margin: 1rem 0; padding: .5rem 0 .5rem 1rem;
+    border-left: 3px solid var(--border); color: var(--muted);
+  }
+  footer { margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid var(--border); color: var(--muted); font-size: .87rem; }
+  .srclist { columns: 2; column-gap: 2rem; }
+  @media (max-width: 700px) {
+    body { padding: 1.25rem .75rem 3rem; }
+    .srclist { columns: 1; }
+  }
+</style>
+</head>
+<body>
+<main>
+
+<h1>Hearing Aids: Soundly vs AirPods Pro 3</h1>
+<p class="sub">
+  Researched 2026-09-15, revised same day after the Sept 9, 2026 Apple event.
+  Sister page: <a href="./hearing-aids.md">hearing-aids.md</a>
+</p>
+
+<div class="note">
+  <strong>Two separate decisions, not either/or.</strong>
+  (1) Buy AirPods Pro 3 today as an FDA-cleared stop-gap (~$219&ndash;249, returnable).
+  (2) Book the free Soundly audiogram, which tells you whether (1) is actually enough.
+  Do both &mdash; (1) commits you to nothing and (2) is free.
+</div>
+
+<h2>The one number that decides everything</h2>
+<p>
+  Apple's Hearing Aid feature is cleared for <strong>&ldquo;perceived mild to moderate hearing
+  loss,&rdquo; adults 18+</strong>. Apple publishes <em>no dB cutoff</em> &mdash; &ldquo;perceived&rdquo;
+  means self-assessed. The standard clinical categories:
+</p>
+
+<div class="scroll">
+<table>
+  <thead>
+    <tr><th>Degree</th><th>dB HL (ASHA/Clark)</th><th>AirPods territory?</th></tr>
+  </thead>
+  <tbody>
+    <tr><th>Mild</th><td>26&ndash;40</td><td class="yes">Yes &mdash; the sweet spot</td></tr>
+    <tr><th>Moderate</th><td>41&ndash;55</td><td class="warn">Upper edge of cleared range</td></tr>
+    <tr><th>Moderately severe</th><td>56&ndash;70</td><td class="no">No &mdash; prescription aids</td></tr>
+    <tr><th>Severe / profound</th><td>71+</td><td class="no">No</td></tr>
+  </tbody>
+</table>
+</div>
+
+<blockquote>
+  The Apple test is reported reliable up to about <strong>55 dB</strong> &mdash; roughly where
+  &ldquo;moderate&rdquo; ends anyway. Past that it's both out of clearance range <em>and</em> out of
+  measurement range.
+</blockquote>
+
+<p><strong>Nothing here is a guess about your hearing.</strong> Get the audiogram.</p>
+
+<h2>Which AirPods are actually cleared</h2>
+
+<div class="stop">
+  <h3>&#9888; Only AirPods Pro 2 and Pro 3</h3>
+  <p style="margin:.5rem 0 0">
+    Apple's exact wording: &ldquo;The Hearing Test and Hearing Aid features are supported on
+    <strong>AirPods Pro 2 and later</strong> with the latest firmware when paired with a compatible
+    iPhone or iPad with iOS&nbsp;18 or iPadOS&nbsp;18 and later.&rdquo;
+    &mdash; <a href="https://www.apple.com/airpods-pro/hearing-health/">Apple</a>
+  </p>
+</div>
+
+<div class="scroll">
+<table>
+  <thead>
+    <tr><th>Model</th><th>Hearing Aid feature</th><th>Notes</th></tr>
+  </thead>
+  <tbody>
+    <tr><th>AirPods Pro 3</th><td class="yes">Yes</td><td>Current Pro model. 10h in hearing-aid mode. <strong>Buy this.</strong></td></tr>
+    <tr><th>AirPods Pro 2</th><td class="yes">Yes</td><td>Fine if you already own a pair. Shorter battery, stiffer tip range.</td></tr>
+    <tr><th>AirPods 5 <small>(Sept 9, 2026)</small></th><td class="no">No</td><td>Newest, cheapest ($129/$149), <strong>wrong product</strong>. Lists Live Listen &amp; Headphone Accommodations only.</td></tr>
+    <tr><th>AirPods 4 with ANC</th><td class="no">No</td><td>Blogs claim it's cleared &mdash; <strong>they're wrong</strong>. Apple lists it under <em>Adaptive Audio</em>, a different feature.</td></tr>
+    <tr><th>AirPods Pro 4</th><td class="warn">Doesn't exist</td><td>Not announced. No FCC filing as of June 2026 (Pro 3 filed 2 months pre-launch). Rumored upgrade is IR cameras &mdash; not hearing. <strong>Nothing to wait for.</strong></td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2>Where to buy &mdash; the return window is the whole ballgame</h2>
+
+<div class="scroll">
+<table>
+  <thead>
+    <tr><th>Retailer</th><th>Return window</th><th>Notes</th></tr>
+  </thead>
+  <tbody>
+    <tr><th><a href="https://www.costco.com/p/-/apple-airpods-pro-3-wireless-earbuds-active-noise-cancellation-hearing-aid-feature-heart-rate-sensing-includes-2-years-of-applecare/4000404510">Costco</a></th><td class="yes">90 days</td><td>Often bundles <strong>2 years AppleCare+</strong>; seen ~$229. Limit 1/membership. Return to any warehouse.</td></tr>
+    <tr><th><a href="https://www.apple.com/airpods-pro/">Apple</a></th><td class="warn">14 days</td><td>Free return shipping, no restocking fee. Best for in-person ear-tip fitting + Genius Bar help.</td></tr>
+    <tr><th><a href="https://www.bestbuy.com/site/searchpage.jsp?id=pcat17071&amp;st=airpods+pro+3">Best Buy</a></th><td>~15 days <small>(longer for members)</small></td><td>Price-matches; frequently ~$219&ndash;229.</td></tr>
+    <tr><th>Amazon / Walmart</th><td>~30 days</td><td>Price-match Costco drops. Buy direct, <strong>never</strong> a marketplace reseller.</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="pick">
+  <h3>&#10003; Costco is the strongest option</h3>
+  <p style="margin:.5rem 0 0">
+    A <strong>90-day</strong> window means you can get the Soundly audiogram, test the AirPods
+    against real clinical numbers, and <em>still</em> return them. Apple's 14 days closes long
+    before any clinic appointment. The bundled AppleCare+ also covers the case where a tip-fit
+    problem becomes a warranty issue. Counterfeit AirPods are common on marketplaces and won't
+    have the feature at all &mdash; buy from the retailer directly.
+  </p>
+</div>
+
+<h2>Ear tips &amp; fit &mdash; matters more here than for music</h2>
+<p>
+  Amplification depends on the <strong>acoustic seal</strong>. A leaky seal bleeds out amplified
+  sound (especially low frequencies), so a bad fit reads as &ldquo;the hearing aid feature doesn't
+  work for me&rdquo; when the real problem is a tip size.
+</p>
+<p><strong>Pro 3 ships five sizes: XXS, XS, S, M, L.</strong> All in the box &mdash; nothing to choose at purchase. XXS is new this generation.</p>
+<ol>
+  <li><strong>Run the Acoustic Seal Test first.</strong> Settings &rarr; AirPods &rarr; Acoustic Seal Test (needs iOS&nbsp;26). Do this <strong>before</strong> the Hearing Test, or you calibrate your hearing profile against a bad seal and bake the error in.</li>
+  <li><strong>Expect to size down.</strong> Pro 3 tips are foam-infused silicone and deliberately firmer than Pro 2's; users consistently report needing a smaller size than before.</li>
+  <li><strong>Different size per ear is normal.</strong> Ears aren't symmetric.</li>
+</ol>
+<div class="note">
+  <strong>Known comfort issue.</strong> Pro 3 has a real complaint trail since launch &mdash; sore ears,
+  irritation, slipping once sweat or skin oil builds up. The firmer tip that produces the better seal
+  is the same thing causing the soreness. Tolerable for a commute playlist; a bigger deal for all-day
+  hearing-aid wear. Test <em>long</em> sessions inside your return window. If no tip size gets a
+  comfortable all-day seal, that's a genuine argument for custom-molded prescription aids.
+</div>
+
+<h2>AirPods Pro 3: honest scorecard</h2>
+<div class="scroll">
+<table>
+  <thead><tr><th>Strengths</th><th>Limitations</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>
+        <ul>
+          <li>FDA-cleared De Novo, Sept 2024 &mdash; first OTC hearing-aid <em>software</em> ever cleared</li>
+          <li><strong>10 hours</strong> in hearing-aid mode (67% more than Pro 2)</li>
+          <li>Automatic Conversation Boost</li>
+          <li>Hearing Test <strong>exports a PDF audiogram</strong> you can hand the clinic</li>
+          <li>Can <em>import</em> a professional audiogram later for better tuning</li>
+          <li>$249 vs $1,998&ndash;$4,098</li>
+        </ul>
+      </td>
+      <td>
+        <ul>
+          <li>Amplification <strong>only in Transparency mode</strong> &mdash; no ANC simultaneously</li>
+          <li>10h &ne; all-day; real aids run 16h+ or a week on a disposable cell</li>
+          <li>Own-voice distortion &mdash; &ldquo;somewhat disembodied from your own voice&rdquo;</li>
+          <li><strong>&ldquo;Nearly impossible to strike a satisfying balance between less noise / more amplification&rdquo;</strong> &mdash; reviewer called this a deal breaker</li>
+          <li>Poor wind handling; best indoors and quiet</li>
+          <li>Controls scattered across ~5 settings screens</li>
+          <li>Visible in meetings; real aids are near-invisible</li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<p><strong>Reviewer verdict:</strong> works for <em>mild</em> loss, for <em>part of the day</em>.</p>
+
+<h2>The Soundly path (free &mdash; do it in parallel)</h2>
+<p>
+  Transparent fixed pricing on <strong>prescription</strong> aids plus a vetted clinic network.
+  Key perk: <strong>free hearing test and consultation</strong>, no purchase obligation.
+  &mdash; <a href="https://www.soundly.com/provider-search">Provider search</a> &middot;
+  <a href="https://www.soundly.com/about-our-providers">About our providers</a>
+</p>
+
+<div class="scroll">
+<table>
+  <thead><tr><th>Item</th><th>Price</th></tr></thead>
+  <tbody>
+    <tr><th>Hearing aids, per pair</th><td><strong>$1,998 &ndash; $4,098</strong></td></tr>
+    <tr><th>First 60 days of appointments</th><td class="yes">Unlimited, included</td></tr>
+    <tr><th>Extended care, 1 year</th><td>$500</td></tr>
+    <tr><th>Extended care, 3 years</th><td>$1,250</td></tr>
+    <tr><th>Pay-as-you-go visit</th><td>~$100</td></tr>
+    <tr><th>Return window</th><td class="yes">60 days, full refund</td></tr>
+  </tbody>
+</table>
+</div>
+
+<p>
+  Soundly claims <strong>25&ndash;35% below national average</strong> and deliberately
+  <em>unbundles</em> care: &ldquo;Some programs bundle 2&ndash;3 years of care into their pricing.
+  With Soundly, you only pay for additional care if and when you need it.&rdquo;
+</p>
+
+<h3>Process</h3>
+<ol>
+  <li>Enter zip at the provider search, browse clinics.</li>
+  <li>Click <strong>&ldquo;Request an Appointment.&rdquo;</strong> The Soundly referral comes <em>first</em> &mdash; it's what gets you the Soundly price. Don't cold-call the clinic.</li>
+  <li>Referral email with confirmation number goes to you <strong>and</strong> the clinic.</li>
+  <li>You call the clinic to schedule.</li>
+  <li>Test &rarr; recommendation &rarr; they order when you're ready.</li>
+  <li>Pay through the <strong>Soundly payment portal</strong>, not the clinic.</li>
+</ol>
+
+<h3>Vetting a clinic before booking</h3>
+<ul>
+  <li><strong>Audiologist, not just a hearing aid specialist.</strong> Both licensed; not the same credential. Soundly's site does <em>not</em> surface this &mdash; check each clinic yourself.</li>
+  <li>Confirm they carry the <strong>brand</strong> you want; some are effectively single-brand shops.</li>
+  <li>Read the clinic's reviews independently.</li>
+</ul>
+
+<h2>Firsthand account (secondhand)</h2>
+<div class="note">
+  From the notes you were handed &mdash; one person's completed purchase, not official policy.
+  Their figures <em>do</em> check out against the live site, which is a good sign for the rest of it.
+  <ul>
+    <li>Paid <strong>$4,098</strong> (top of range) <strong>+ $500</strong> for a year of follow-ups.</li>
+    <li>Ordered one day after first visit; aids arrived at the clinic in <strong>3 days</strong>.</li>
+    <li>Clinic handled the fitting &mdash; they call this <strong>&ldquo;the critical step.&rdquo;</strong></li>
+    <li>Many network clinics in their area, but &ldquo;only impressed with one.&rdquo;</li>
+    <li><strong>&ldquo;My hearing loss required a premium HA&rdquo;</strong> &mdash; &#9888; that was <em>their</em> audiogram, not yours. The range <em>starts</em> at $1,998; $4,098 is the ceiling, not the going rate.</li>
+  </ul>
+</div>
+
+<h2>Recommended sequence</h2>
+<ol>
+  <li><strong>Today</strong> &mdash; Buy AirPods Pro 3 (~$219&ndash;249). <strong>Prefer Costco</strong> for the 90-day window + AppleCare+. You want earbuds regardless.</li>
+  <li><strong>Today</strong> &mdash; Run the <strong>Acoustic Seal Test</strong> and settle tip size <em>first</em>, then the Hearing Test. Export the PDF audiogram.</li>
+  <li><strong>Today/tomorrow</strong> &mdash; Submit a Soundly appointment request. Free, zero obligation.</li>
+  <li><strong>Weeks 1&ndash;12</strong> &mdash; Actually wear them: meetings, restaurants, outdoors, TV. Note where they fail. That's real data for the audiologist.</li>
+  <li><strong>At the clinic</strong> &mdash; Bring the Apple PDF. Get the proper audiogram.</li>
+  <li><strong>Decide:</strong>
+    <ul>
+      <li>Solidly <strong>mild</strong> and AirPods working &rarr; you may be done. Revisit later; hearing loss is progressive.</li>
+      <li><strong>Moderate</strong>, or AirPods fall short in noise/all-day &rarr; prescription aids, with a 60-day refund window to prove themselves.</li>
+      <li><strong>Moderately severe or worse</strong> &rarr; AirPods were never going to be enough. Nothing lost; you got earbuds and a cheap education.</li>
+    </ul>
+  </li>
+</ol>
+
+<div class="stop">
+  <strong>The failure mode to avoid:</strong> using a good-enough stop-gap as the reason to skip the
+  free test for two years. Book the test today too.
+</div>
+
+<h2>HSA/FSA</h2>
+<p>
+  FDA clearance &ne; IRS eligibility. Prescription hearing aids are clearly eligible; consumer
+  earbuds with amplification modes are generally listed as <strong>not</strong> eligible, and
+  administrators are waiting on IRS guidance. Ask your plan administrator before assuming.
+  Prescription aids through Soundly <em>are</em> normal eligible medical expenses.
+</p>
+
+<footer>
+  <strong>Sources</strong>
+  <ul class="srclist">
+    <li><a href="https://support.apple.com/en-us/120992">Apple &mdash; Hearing Aid feature</a></li>
+    <li><a href="https://support.apple.com/en-us/120991">Apple &mdash; Take a Hearing Test</a></li>
+    <li><a href="https://www.apple.com/airpods-pro/hearing-health/">Apple &mdash; AirPods Pro Hearing Health</a></li>
+    <li><a href="https://support.apple.com/en-us/119849">Apple &mdash; Choose your ear tips</a></li>
+    <li><a href="https://www.apple.com/shop/help/returns_refund">Apple &mdash; Returns &amp; Refunds</a></li>
+    <li><a href="https://www.soundly.com/provider-search">Soundly &mdash; Provider search</a></li>
+    <li><a href="https://www.soundly.com/about-our-providers">Soundly &mdash; About our providers</a></li>
+    <li><a href="https://www.costco.com/p/-/apple-airpods-pro-3-wireless-earbuds-active-noise-cancellation-hearing-aid-feature-heart-rate-sensing-includes-2-years-of-applecare/4000404510">Costco &mdash; AirPods Pro 3 + AppleCare+</a></li>
+    <li><a href="https://www.bestbuy.com/site/searchpage.jsp?id=pcat17071&amp;st=airpods+pro+3">Best Buy &mdash; AirPods Pro 3</a></li>
+    <li><a href="https://www.techlicious.com/review/apple-airpods-pro-3-as-hearing-aids-are-still-flawed/">Techlicious &mdash; Still flawed as hearing aids</a></li>
+    <li><a href="https://www.hearingtracker.com/hearing-aids/apple-airpods-pro-3">HearingTracker &mdash; AirPods Pro 3 review</a></li>
+    <li><a href="https://www.soundguys.com/apple-airpods-pro-3-fit-issues-145481/">SoundGuys &mdash; Pro 3 fit issues</a></li>
+    <li><a href="https://www.macrumors.com/2025/09/16/airpods-pro-3-acoustic-seal-test/">MacRumors &mdash; Acoustic Seal Test</a></li>
+    <li><a href="https://www.macrumors.com/2026/09/09/apple-september-2026-event-recap/">MacRumors &mdash; Sept 2026 event recap</a></li>
+    <li><a href="https://www.macobserver.com/news/airpods-5-hearing-test-hearing-protection-what-apple-lists/">MacObserver &mdash; AirPods 5 hearing features</a></li>
+    <li><a href="https://www.asha.org/public/hearing/degree-of-hearing-loss/">ASHA &mdash; Degree of hearing loss</a></li>
+    <li><a href="https://www.cbsnews.com/news/fda-approves-apple-airpods-2-as-hearing-aids/">CBS &mdash; FDA clearance</a></li>
+    <li><a href="https://fsaguide.com/how-to-shop/what-to-buy/fda-approves-airpods-pro-as-hearing-aids-what-this-means-for-fsa-and-hsa-eligibility/">FSA Guide &mdash; eligibility</a></li>
+  </ul>
+  <p>
+    <strong>Caveats.</strong> Apple publishes no dB cutoff for &ldquo;mild to moderate&rdquo; &mdash; the
+    categories table uses standard ASHA/Clark ranges, which vary slightly between guidelines.
+    Retailer return windows and prices change; confirm at purchase. The $4,098/$500 firsthand figures
+    are one buyer's experience. Several hearing-aid blogs incorrectly list AirPods 4 with ANC as
+    FDA-cleared; Apple's own compatibility footnote is the primary source and says Pro 2 and later.
+  </p>
+</footer>
+
+</main>
+</body>
+</html>
