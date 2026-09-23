@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Neovim: Install &amp; Basic Usage</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --fg: #1a1a1a;
+    --muted: #666;
+    --border: #d8d8d8;
+    --head-bg: #f4f4f5;
+    --row-alt: #fafafa;
+    --link: #0a58ca;
+    --code-bg: #f4f4f5;
+    --code-border: #e0e0e2;
+    --kbd-bg: #ffffff;
+    --kbd-border: #c9c9cc;
+    --kbd-shadow: #b8b8bb;
+    --note-bg: #fff8e6;
+    --note-border: #e0b64a;
+    --pick-bg: #eef7f0;
+    --pick-border: #0f7b3d;
+    --tab-bg: #f4f4f5;
+    --tab-active-bg: #ffffff;
+    --tab-active-fg: #1a1a1a;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #17181a;
+      --fg: #e9e9ea;
+      --muted: #a0a0a4;
+      --border: #34363a;
+      --head-bg: #202226;
+      --row-alt: #1c1d20;
+      --link: #78aeff;
+      --code-bg: #1e1f22;
+      --code-border: #33353a;
+      --kbd-bg: #26282c;
+      --kbd-border: #45484e;
+      --kbd-shadow: #0b0c0d;
+      --note-bg: #2a2417;
+      --note-border: #7a6122;
+      --pick-bg: #16241b;
+      --pick-border: #2f7d4c;
+      --tab-bg: #1c1d20;
+      --tab-active-bg: #26282c;
+      --tab-active-fg: #e9e9ea;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 2rem 1.25rem 4rem;
+    background: var(--bg);
+    color: var(--fg);
+    font: 15px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  }
+  main { max-width: 1100px; margin: 0 auto; }
+  h1 { font-size: 1.85rem; margin: 0 0 .35rem; letter-spacing: -.02em; }
+  h2 { font-size: 1.2rem; margin: 2.5rem 0 .75rem; letter-spacing: -.01em; }
+  h3 { font-size: 1rem; margin: 1.5rem 0 .5rem; }
+  .sub { color: var(--muted); margin: 0 0 1.5rem; }
+  a { color: var(--link); }
+  a:hover { text-decoration: none; }
+  code {
+    font: .88em/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 4px;
+    padding: .1em .35em;
+  }
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 6px;
+    padding: .9rem 1rem;
+    overflow-x: auto;
+    font: .87rem/1.55 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  pre code { background: none; border: none; padding: 0; }
+  kbd {
+    display: inline-block;
+    font: .82em/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    background: var(--kbd-bg);
+    border: 1px solid var(--kbd-border);
+    border-bottom-width: 2px;
+    border-radius: 4px;
+    padding: .18em .45em;
+    box-shadow: 0 1px 0 var(--kbd-shadow);
+  }
+  .note {
+    background: var(--note-bg);
+    border-left: 4px solid var(--note-border);
+    padding: .85rem 1rem;
+    border-radius: 0 6px 6px 0;
+    margin: 0 0 1.75rem;
+    font-size: .92rem;
+  }
+  .pick {
+    background: var(--pick-bg);
+    border-left: 4px solid var(--pick-border);
+    padding: 1rem 1.15rem;
+    border-radius: 0 6px 6px 0;
+    margin: 1rem 0;
+  }
+  .pick h3 { margin: 0 0 .5rem; font-size: 1.05rem; }
+  .scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  table { border-collapse: collapse; width: 100%; font-size: .9rem; }
+  th, td {
+    border: 1px solid var(--border);
+    padding: .55rem .7rem;
+    text-align: left;
+    vertical-align: top;
+  }
+  thead th {
+    background: var(--head-bg);
+    white-space: nowrap;
+    font-size: .9rem;
+  }
+  tbody th {
+    background: var(--head-bg);
+    white-space: nowrap;
+    font-weight: 600;
+  }
+  tbody tr:nth-child(even) td { background: var(--row-alt); }
+  ul, ol { margin: .5rem 0; padding-left: 1.3rem; }
+  li { margin: .3rem 0; }
+
+  /* OS install tabs */
+  .tabs { display: flex; gap: .25rem; border-bottom: 1px solid var(--border); margin: 1rem 0 0; }
+  .tab-btn {
+    font: inherit;
+    font-size: .88rem;
+    font-weight: 600;
+    color: var(--muted);
+    background: var(--tab-bg);
+    border: 1px solid var(--border);
+    border-bottom: none;
+    border-radius: 6px 6px 0 0;
+    padding: .5rem 1rem;
+    cursor: pointer;
+  }
+  .tab-btn[aria-selected="true"] {
+    background: var(--tab-active-bg);
+    color: var(--tab-active-fg);
+  }
+  .tab-panel { border: 1px solid var(--border); border-top: none; border-radius: 0 0 6px 6px; padding: 1rem; margin-bottom: 1.5rem; background: var(--tab-active-bg); }
+  .tab-panel[hidden] { display: none; }
+  .tab-panel pre:last-child { margin-bottom: 0; }
+
+  /* Side-by-side mode/keys layout */
+  .cols { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem; margin: 1rem 0 1.5rem; }
+  .col h3 { margin-top: 0; }
+  footer { margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid var(--border); color: var(--muted); font-size: .87rem; }
+  @media (max-width: 700px) {
+    body { padding: 1.25rem .75rem 3rem; }
+    .cols { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<main>
+
+<h1>Neovim: Install &amp; Basic Usage</h1>
+<p class="sub">A fork of Vim with async plugins, built-in LSP, and Lua config &mdash; command-compatible with vi/vim.</p>
+
+<div class="note">
+  <strong>If you already know vi/vim:</strong> your muscle memory transfers directly. Every
+  command below works identically in Neovim; the differences are additions, not replacements.
+</div>
+
+<h2>Install</h2>
+
+<div class="tabs" role="tablist" aria-label="Install instructions by OS">
+  <button class="tab-btn" role="tab" id="tab-mac" aria-controls="panel-mac" aria-selected="true">macOS</button>
+  <button class="tab-btn" role="tab" id="tab-linux" aria-controls="panel-linux" aria-selected="false">Linux</button>
+  <button class="tab-btn" role="tab" id="tab-win" aria-controls="panel-win" aria-selected="false">Windows</button>
+</div>
+
+<div class="tab-panel" role="tabpanel" id="panel-mac" aria-labelledby="tab-mac">
+<p>Via Homebrew:</p>
+<pre><code>brew install neovim</code></pre>
+</div>
+
+<div class="tab-panel" role="tabpanel" id="panel-linux" aria-labelledby="tab-linux" hidden>
+<pre><code># Debian/Ubuntu (apt often ships an old version &mdash; check with `nvim --version`)
+sudo apt install neovim
+
+# Fedora
+sudo dnf install neovim
+
+# Arch
+sudo pacman -S neovim</code></pre>
+<p>If your distro's package is stale, grab the latest AppImage or tarball from the
+<a href="https://github.com/neovim/neovim/releases">Neovim releases page</a>.</p>
+</div>
+
+<div class="tab-panel" role="tabpanel" id="panel-win" aria-labelledby="tab-win" hidden>
+<pre><code>winget install Neovim.Neovim
+# or
+choco install neovim</code></pre>
+</div>
+
+<p>Verify it installed:</p>
+<pre><code>nvim --version</code></pre>
+
+<h2>Basic Usage</h2>
+
+<p>Neovim keeps Vim's modal editing model:</p>
+<ul>
+  <li><strong>Normal mode</strong> &mdash; the default; keys are commands, not text input.</li>
+  <li><strong>Insert mode</strong> &mdash; press <kbd>i</kbd> to enter, type text, <kbd>Esc</kbd> to leave.</li>
+  <li><strong>Visual mode</strong> &mdash; press <kbd>v</kbd> to select text, <kbd>Esc</kbd> to leave.</li>
+  <li><strong>Command-line mode</strong> &mdash; press <kbd>:</kbd> to run commands (save, quit, search/replace, etc.).</li>
+</ul>
+
+<h3>Opening and closing</h3>
+<pre><code>nvim file.txt     # open a file
+nvim .             # open the built-in file explorer in the current directory</code></pre>
+
+<div class="scroll">
+<table>
+  <thead><tr><th>Command</th><th>Effect</th></tr></thead>
+  <tbody>
+    <tr><td><code>:w</code></td><td>save</td></tr>
+    <tr><td><code>:q</code></td><td>quit</td></tr>
+    <tr><td><code>:wq</code> or <kbd>ZZ</kbd></td><td>save and quit</td></tr>
+    <tr><td><code>:q!</code></td><td>quit without saving</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="cols">
+  <div class="col">
+    <h3>Moving around (Normal mode)</h3>
+    <div class="scroll">
+    <table>
+      <thead><tr><th>Key</th><th>Effect</th></tr></thead>
+      <tbody>
+        <tr><td><kbd>h</kbd> <kbd>j</kbd> <kbd>k</kbd> <kbd>l</kbd></td><td>left / down / up / right</td></tr>
+        <tr><td><kbd>w</kbd> / <kbd>b</kbd></td><td>next / previous word</td></tr>
+        <tr><td><kbd>0</kbd> / <kbd>$</kbd></td><td>start / end of line</td></tr>
+        <tr><td><kbd>gg</kbd> / <kbd>G</kbd></td><td>start / end of file</td></tr>
+        <tr><td><code>:n</code></td><td>go to line <code>n</code></td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+  <div class="col">
+    <h3>Editing (Normal mode)</h3>
+    <div class="scroll">
+    <table>
+      <thead><tr><th>Key</th><th>Effect</th></tr></thead>
+      <tbody>
+        <tr><td><kbd>i</kbd> / <kbd>a</kbd></td><td>insert before / after cursor</td></tr>
+        <tr><td><kbd>o</kbd> / <kbd>O</kbd></td><td>open new line below / above</td></tr>
+        <tr><td><kbd>x</kbd></td><td>delete character under cursor</td></tr>
+        <tr><td><kbd>dd</kbd></td><td>delete (cut) current line</td></tr>
+        <tr><td><kbd>yy</kbd></td><td>yank (copy) current line</td></tr>
+        <tr><td><kbd>p</kbd> / <kbd>P</kbd></td><td>paste after / before cursor</td></tr>
+        <tr><td><kbd>u</kbd></td><td>undo</td></tr>
+        <tr><td><kbd>Ctrl-r</kbd></td><td>redo</td></tr>
+        <tr><td><code>/pattern</code></td><td>search forward</td></tr>
+        <tr><td><code>:%s/old/new/g</code></td><td>replace all occurrences on all lines</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+</div>
+
+<h3>Getting help</h3>
+<pre><code>:help             " open help
+:help &lt;topic&gt;     " help for a specific command, e.g. :help dd
+:checkhealth      " diagnose your Neovim setup</code></pre>
+
+<h3>Config file location</h3>
+<p>Vim reads <code>~/.vimrc</code>. Neovim reads Lua (or Vimscript) from:</p>
+<pre><code>~/.config/nvim/init.lua     # preferred
+~/.config/nvim/init.vim     # also supported</code></pre>
+
+<p>A minimal starting config:</p>
+<pre><code>vim.opt.number = true
+vim.opt.relativenumber = true
+vim.opt.expandtab = true
+vim.opt.shiftwidth = 2
+vim.opt.tabstop = 2
+vim.opt.ignorecase = true
+vim.opt.smartcase = true</code></pre>
+
+<h2>vi/vim vs Neovim &mdash; Key Differences</h2>
+
+<div class="scroll">
+<table>
+  <thead>
+    <tr><th>Area</th><th>vi / Vim</th><th>Neovim</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Config language</th>
+      <td>Vimscript (<code>.vimrc</code>)</td>
+      <td>Lua (<code>init.lua</code>), Vimscript still works</td>
+    </tr>
+    <tr>
+      <th>LSP (autocomplete, go-to-def, diagnostics)</th>
+      <td>Not built in; needs plugins (coc.nvim, YouCompleteMe)</td>
+      <td>Built-in LSP client (<code>vim.lsp</code>); pair with a server via <code>nvim-lspconfig</code></td>
+    </tr>
+    <tr>
+      <th>Syntax highlighting</th>
+      <td>Regex-based</td>
+      <td>Regex-based, with an optional built-in Tree-sitter parser for accurate, AST-based highlighting</td>
+    </tr>
+    <tr>
+      <th>Async / job control</th>
+      <td>Vim 8+ has jobs, but limited API</td>
+      <td>First-class async API (<code>vim.loop</code>/libuv), plugins don't block the UI</td>
+    </tr>
+    <tr>
+      <th>Embedded scripting</th>
+      <td>Vimscript only (Vim 9 adds Vim9script)</td>
+      <td>Vimscript <strong>and</strong> Lua, with a documented Lua stdlib (<code>vim.*</code>)</td>
+    </tr>
+    <tr>
+      <th>Plugin ecosystem</th>
+      <td>Mature, huge (Vim 8 native package support)</td>
+      <td>Same ecosystem mostly works, plus Lua-native plugins (lazy.nvim, telescope.nvim, etc.)</td>
+    </tr>
+    <tr>
+      <th>Terminal emulator</th>
+      <td>None built in</td>
+      <td><code>:terminal</code> opens a real terminal buffer</td>
+    </tr>
+    <tr>
+      <th>Remote/plugin API</th>
+      <td>Limited (<code>--servername</code> on some builds)</td>
+      <td>RPC API (msgpack) &mdash; the basis for GUIs, IDE integrations (VSCode-Neovim, etc.)</td>
+    </tr>
+    <tr>
+      <th>Defaults</th>
+      <td>Very minimal, <code>vi</code>-compatible by default</td>
+      <td>Saner out-of-the-box defaults (syntax on, incremental search, etc.) even before any config</td>
+    </tr>
+    <tr>
+      <th>Distribution</th>
+      <td><code>vi</code> ships on virtually every Unix system</td>
+      <td>Not preinstalled anywhere; you always install it explicitly</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div class="pick">
+  <h3>Bottom line</h3>
+  <p style="margin:0">If you already know vi/vim commands, they work unchanged in Neovim. The
+  practical reasons to prefer Neovim are built-in LSP support, Tree-sitter highlighting, a
+  real async plugin API, and Lua configuration &mdash; all things that historically required
+  bolting plugins onto Vim.</p>
+</div>
+
+<h2>Further Reading</h2>
+<ul>
+  <li><a href="https://neovim.io/">neovim.io</a></li>
+  <li><a href="https://github.com/neovim/neovim">Neovim GitHub</a></li>
+  <li><code>:help nvim-from-vim</code> inside Neovim itself</li>
+</ul>
+
+</main>
+
+<script>
+(function () {
+  var tabs = document.querySelectorAll('.tab-btn');
+  tabs.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      tabs.forEach(function (b) {
+        b.setAttribute('aria-selected', 'false');
+        document.getElementById(b.getAttribute('aria-controls')).hidden = true;
+      });
+      btn.setAttribute('aria-selected', 'true');
+      document.getElementById(btn.getAttribute('aria-controls')).hidden = false;
+    });
+  });
+})();
+</script>
+</body>
+</html>
