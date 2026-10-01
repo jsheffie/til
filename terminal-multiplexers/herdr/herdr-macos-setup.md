@@ -141,15 +141,20 @@ binary. Manual fallback:
 [`skills/herdr/SKILL.md`](https://github.com/herdrdev/herdr/blob/master/skills/herdr/SKILL.md).
 
 Separately, [`herdr.dev/agent-guide.md`](https://herdr.dev/agent-guide.md) is
-for an agent *teaching a human* to set up Herdr — the skill is for an agent
+for an agent *teaching a human* to set up Herdr (local copy:
+[`herdr-agent-guide.md`](./herdr-agent-guide.md)) — the skill is for an agent
 *operating* Herdr.
+
+[`herdr.dev/llms.txt`](https://herdr.dev/llms.txt) is the LLM-oriented index
+of the Herdr docs (links to raw source pages pinned to a release). Local copy,
+fetched 2026-09-27 at v0.9.1: [`herdr-llms.txt`](./herdr-llms.txt).
 
 ## Videos
 
 - [Herdr: Why Developers Are Replacing Tmux with AI Agents](https://www.youtube.com/watch?v=7W_H9313DHQ)
   — Damian Galarza
 
-See [`terminal-multiplexers.md`](./terminal-multiplexers.md) for more
+See [`terminal-multiplexers.md`](../terminal-multiplexers.md) for more
 third-party Herdr videos.
 
 ## Why Herdr (context)
@@ -158,7 +163,7 @@ Chosen over alternatives (tmux, Screen, dvtm, Byobu, cmux, Superlogical) for
 native agent-awareness — it marks panes as working/blocked/idle and notifies
 when an agent stops and needs input — and because it runs on **both** macOS
 and Linux (unlike cmux, which is macOS-only). See
-[`terminal-multiplexers.md`](./terminal-multiplexers.md) for the full
+[`terminal-multiplexers.md`](../terminal-multiplexers.md) for the full
 comparison.
 
 ## Notes
@@ -166,3 +171,5 @@ comparison.
 - License: Apache-2.0.
 - Windows install (for reference): `powershell -ExecutionPolicy Bypass -c "irm https://herdr.dev/install.ps1 | iex"`.
 - A Linux-specific setup doc will be added separately.
+- Working against a remote Herdr host (SSH, `herdr --remote`, saved machines):
+  see [`herdr-remote-access.md`](./herdr-remote-access.md).

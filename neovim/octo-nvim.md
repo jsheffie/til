@@ -45,6 +45,8 @@ Any of these work:
 :Octo pr edit 123 owner/repo                       " PR #123 in another repo
 :Octo https://github.com/owner/repo/pull/123       " paste a GitHub URL
 :e octo://owner/repo/pull/123                      " works from any directory
+:Octo pr changes                                   " file changes, works with teloscope
+:Octo pr commits                                   " pr commits
 ```
 
 `:Octo pr checkout` (inside the PR buffer) checks the PR branch out locally.

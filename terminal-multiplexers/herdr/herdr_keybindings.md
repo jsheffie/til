@@ -147,7 +147,7 @@ height = "80%"
 ## herdr-file-viewer keys (inside the viewer)
 
 Most used; full list in the plugin's `docs/keys.md` and
-[herdr-configuration-notes.md](../herdr-configuration-notes.md).
+[herdr-configuration-notes.md](./herdr-configuration-notes.md).
 
 | Key | Action |
 |---|---|
