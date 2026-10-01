@@ -1,0 +1,460 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Omarchy Plugin Anatomy</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Public+Sans:wght@400;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+  :root {
+    --ground: #f2f4f6;
+    --surface: #ffffff;
+    --surface-2: #e7eaee;
+    --ink: #1b1f26;
+    --muted: #5c6470;
+    --line: #c9ced6;
+    --accent: #0e8a7b;
+    --accent-soft: #d6efe9;
+    --user: #b8730a;
+    --user-soft: #f7e9d0;
+    --danger: #b3413b;
+    --code-bg: #e9ecf0;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #15181d;
+      --surface: #1e2229;
+      --surface-2: #272c34;
+      --ink: #e6e8ec;
+      --muted: #98a0ab;
+      --line: #3a414b;
+      --accent: #3fc9b4;
+      --accent-soft: #163a35;
+      --user: #e0a040;
+      --user-soft: #3d2f14;
+      --danger: #e2736c;
+      --code-bg: #12151a;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #15181d;
+    --surface: #1e2229;
+    --surface-2: #272c34;
+    --ink: #e6e8ec;
+    --muted: #98a0ab;
+    --line: #3a414b;
+    --accent: #3fc9b4;
+    --accent-soft: #163a35;
+    --user: #e0a040;
+    --user-soft: #3d2f14;
+    --danger: #e2736c;
+    --code-bg: #12151a;
+  }
+
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: "Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-size: 16px;
+    line-height: 1.55;
+    padding-block: 40px 96px;
+    padding-inline: 20px;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; }
+  h1, h2, h3 {
+    font-family: "Bricolage Grotesque", "Public Sans", system-ui, sans-serif;
+    text-wrap: balance;
+    line-height: 1.1;
+    margin: 0;
+  }
+  h1 { font-size: clamp(34px, 6vw, 52px); font-weight: 700; letter-spacing: -0.01em; }
+  h2 { font-size: 26px; font-weight: 700; margin-top: 64px; margin-bottom: 14px; }
+  h3 { font-size: 18px; font-weight: 700; margin-top: 28px; margin-bottom: 8px; }
+  p { max-width: 66ch; margin: 0 0 14px; }
+  .lede { font-size: 19px; color: var(--muted); max-width: 60ch; margin-top: 14px; }
+  .eyebrow {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 10px;
+  }
+  .meta {
+    display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 22px;
+    font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 12.5px; color: var(--muted);
+  }
+  code, pre {
+    font-family: "JetBrains Mono", ui-monospace, "Cascadia Mono", monospace;
+    font-size: 0.88em;
+  }
+  code { background: var(--code-bg); padding: 1px 5px; border-radius: 4px; }
+  pre {
+    background: var(--code-bg); border: 1px solid var(--line); border-radius: 6px;
+    padding: 14px 16px; overflow-x: auto; line-height: 1.5; margin: 0 0 16px;
+  }
+  pre code { background: none; padding: 0; font-size: 13px; }
+  a { color: var(--accent); }
+
+  nav.toc {
+    margin-top: 32px; padding: 14px 18px; border-left: 3px solid var(--accent);
+    background: var(--surface); display: grid; gap: 6px 22px;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+  nav.toc a { text-decoration: none; color: var(--ink); font-size: 15px; }
+  nav.toc a:hover, nav.toc a:focus-visible { color: var(--accent); }
+
+  figure { margin: 22px 0 8px; }
+  figure svg { display: block; width: 100%; height: auto; }
+  .figwrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 12px; }
+  figcaption { font-size: 14px; color: var(--muted); margin-top: 10px; max-width: 66ch; }
+  svg text { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 12px; fill: currentColor; }
+  svg .lbl { font-size: 11px; fill: var(--muted); }
+  svg .box { fill: var(--surface-2); stroke: var(--line); stroke-width: 1; }
+  svg .host { fill: none; stroke: var(--accent); stroke-width: 1.5; stroke-dasharray: 6 4; }
+  svg .fp { fill: var(--accent-soft); stroke: var(--accent); }
+  svg .tp { fill: var(--user-soft); stroke: var(--user); }
+  svg .file { fill: var(--surface); stroke: var(--line); }
+  svg .edge { stroke: currentColor; stroke-width: 1.2; fill: none; }
+  svg .edge.acc { stroke: var(--accent); }
+  svg .edge.usr { stroke: var(--user); }
+  svg .edge.bad { stroke: var(--danger); stroke-dasharray: 3 3; }
+  svg .gate { fill: var(--surface); stroke: var(--ink); stroke-width: 1.2; }
+  svg .bad-t { fill: var(--danger); font-size: 11px; }
+  svg .head { font-family: "Bricolage Grotesque", sans-serif; font-weight: 700; font-size: 13px; }
+
+  table { border-collapse: collapse; width: 100%; font-size: 14.5px; margin: 8px 0 18px; }
+  .tablewrap { overflow-x: auto; }
+  th, td { text-align: left; vertical-align: top; padding: 8px 10px; border-bottom: 1px solid var(--line); }
+  th { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 11.5px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+  td code { white-space: nowrap; }
+
+  .rules { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); margin: 14px 0 6px; }
+  .rule { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; }
+  .rule .k { font-family: "Bricolage Grotesque", sans-serif; font-weight: 700; font-size: 15px; margin-bottom: 4px; }
+  .rule p { font-size: 14px; margin: 0; color: var(--muted); }
+  .tag { display: inline-block; font-family: "JetBrains Mono", monospace; font-size: 11px; padding: 1px 7px; border-radius: 999px; margin-left: 6px; vertical-align: 2px; }
+  .tag.fp { background: var(--accent-soft); color: var(--accent); }
+  .tag.tp { background: var(--user-soft); color: var(--user); }
+
+  .warn { border-left: 3px solid var(--danger); background: var(--surface); padding: 12px 16px; margin: 18px 0; }
+  .warn p { margin: 0; }
+  ul { padding-left: 20px; max-width: 66ch; }
+  li { margin-bottom: 6px; }
+  .src { font-size: 13.5px; color: var(--muted); }
+  @media (prefers-reduced-motion: no-preference) { a { transition: color .15s; } }
+</style>
+
+<div class="wrap">
+  <div class="eyebrow">omarchy 4.0.2 · quickshell · read from $OMARCHY_PATH on this machine</div>
+  <h1>Omarchy Plugin Anatomy</h1>
+  <p class="lede">The desktop is one long-running process, and almost everything you see in it is a plugin: a folder with a <code>manifest.json</code> and some QML. This page shows the mechanism: how a plugin is found, checked, switched on, and loaded.</p>
+  <div class="meta">
+    <span>first-party: $OMARCHY_PATH/shell/plugins/</span>
+    <span>yours: ~/.config/omarchy/plugins/&lt;id&gt;/</span>
+    <span>state: ~/.config/omarchy/shell.json</span>
+  </div>
+
+  <nav class="toc" aria-label="Sections">
+    <a href="#host">1 · One process, many plugins</a>
+    <a href="#manifest">2 · What a plugin is</a>
+    <a href="#lifecycle">3 · From git URL to running code</a>
+    <a href="#state">4 · Where "enabled" lives</a>
+    <a href="#ipc">5 · Talking to plugins</a>
+    <a href="#cli">6 · CLI cheat sheet</a>
+  </nav>
+
+  <h2 id="host">1 · One process, many plugins</h2>
+  <p><code>omarchy-shell</code> is a single Quickshell instance launched by Hyprland autostart. The bar, its widgets, the dropdown panels, fullscreen overlays, the Omarchy menu, the lock screen, the polkit dialog and headless services all run inside it. A <code>PluginRegistry</code> object scans two directories at startup, validates every manifest, and hands the rest of the shell a map of what exists and whether it is enabled.</p>
+
+  <figure>
+    <div class="figwrap">
+    <svg viewBox="0 0 960 520" role="img" aria-label="Two plugin directories are scanned by the PluginRegistry inside the omarchy-shell process; the registry consults shell.json for enabled state and feeds the bar, panel loaders and service host; keybindings and the CLI reach plugins through IPC.">
+      <defs>
+        <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
+        </marker>
+        <marker id="arr-acc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"/>
+        </marker>
+        <marker id="arr-usr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="var(--user)"/>
+        </marker>
+      </defs>
+
+      <!-- left column: sources -->
+      <rect class="box fp" x="20" y="40" width="250" height="76" rx="6"/>
+      <text x="32" y="62" class="head">$OMARCHY_PATH/shell/plugins/</text>
+      <text x="32" y="82" class="lbl">first-party, __isFirstParty</text>
+      <text x="32" y="98" class="lbl">manifest.json / *.manifest.json</text>
+
+      <rect class="box tp" x="20" y="150" width="250" height="76" rx="6"/>
+      <text x="32" y="172" class="head">~/.config/omarchy/plugins/</text>
+      <text x="32" y="192" class="lbl">third-party + your clones</text>
+      <text x="32" y="208" class="lbl">&lt;id&gt;/manifest.json only</text>
+
+      <rect class="box" x="20" y="260" width="250" height="60" rx="6"/>
+      <text x="32" y="282" class="head">inotifywait -m -r</text>
+      <text x="32" y="302" class="lbl">close_write create delete move</text>
+      <path class="edge usr" d="M145 260 L145 226" marker-end="url(#arr-usr)"/>
+      <text x="152" y="247" class="lbl">watches</text>
+      <text x="20" y="344" class="lbl">on change: hot reload that plugin</text>
+
+      <!-- host -->
+      <rect class="host" x="300" y="20" width="460" height="480" rx="10"/>
+      <text x="314" y="42" class="head" style="fill: var(--accent)">omarchy-shell, one Quickshell process</text>
+
+      <rect class="box" x="320" y="60" width="220" height="76" rx="6"/>
+      <text x="332" y="80" class="head">PluginRegistry</text>
+      <text x="332" y="98" class="lbl">validate, merge, isEnabled()</text>
+      <text x="332" y="114" class="lbl">rejects 3p omarchy.* ids</text>
+
+      <!-- scan edges into registry -->
+      <path class="edge acc" d="M270 78 L320 86" marker-end="url(#arr-acc)"/>
+      <text x="278" y="70" class="lbl">scan</text>
+      <path class="edge usr" d="M270 188 C 300 188, 300 110, 320 108" marker-end="url(#arr-usr)"/>
+      <text x="278" y="162" class="lbl">scan</text>
+      <path class="edge usr" d="M270 290 C 310 290, 296 130, 320 124" marker-end="url(#arr-usr)"/>
+
+      <!-- bar -->
+      <rect class="box" x="320" y="180" width="200" height="120" rx="6"/>
+      <text x="332" y="200" class="head">Bar (kind: bar)</text>
+      <text x="332" y="218" class="lbl">omarchy.bar, or a</text>
+      <text x="332" y="234" class="lbl">replacement bar plugin</text>
+      <rect class="box fp" x="332" y="250" width="52" height="30" rx="4"/><text x="340" y="269" class="lbl">menu</text>
+      <rect class="box fp" x="390" y="250" width="52" height="30" rx="4"/><text x="396" y="269" class="lbl">clock</text>
+      <rect class="box tp" x="448" y="250" width="52" height="30" rx="4"/><text x="454" y="269" class="lbl">jds.x</text>
+
+      <!-- panel loaders -->
+      <rect class="box" x="540" y="180" width="200" height="120" rx="6"/>
+      <text x="552" y="200" class="head">Panel loaders</text>
+      <text x="552" y="218" class="lbl">one Loader each for</text>
+      <text x="552" y="234" class="lbl">panel, overlay, menu</text>
+      <text x="552" y="254" class="lbl">loaded on summon</text>
+      <text x="552" y="270" class="lbl">keepLoaded: true</text>
+      <text x="552" y="286" class="lbl">stays mounted</text>
+
+      <!-- service host -->
+      <rect class="box" x="320" y="330" width="420" height="70" rx="6"/>
+      <text x="332" y="350" class="head">Service host</text>
+      <text x="332" y="368" class="lbl">kind: service, created once at startup</text>
+      <text x="332" y="384" class="lbl">battery idle media nightlight lock polkit</text>
+
+      <!-- registry -> consumers -->
+      <path class="edge" d="M430 136 L420 180" marker-end="url(#arr)"/>
+      <text x="438" y="162" class="lbl">widget slots</text>
+      <path class="edge" d="M540 120 L640 180" marker-end="url(#arr)"/>
+      <text x="565" y="150" class="lbl">entryPointUrl</text>
+      <path class="edge" d="M320 120 L310 120 L310 365 L320 365" marker-end="url(#arr)"/>
+
+      <!-- injected props -->
+      <text x="320" y="430" class="lbl">injected: omarchyPath, shell, manifest,</text>
+      <text x="320" y="446" class="lbl">pluginRegistry, barWidgetRegistry</text>
+      <text x="320" y="468" class="lbl">bar widgets also: bar, moduleName, settings</text>
+
+      <!-- shell.json -->
+      <rect class="box file" x="800" y="60" width="140" height="76" rx="6"/>
+      <text x="812" y="82" class="head">shell.json</text>
+      <text x="812" y="100" class="lbl">bar.layout</text>
+      <text x="812" y="116" class="lbl">plugins[]</text>
+      <path class="edge" d="M540 98 L800 98" marker-start="url(#arr)" marker-end="url(#arr)"/>
+      <text x="670" y="88" class="lbl" text-anchor="middle">reads / mutates</text>
+
+      <!-- IPC -->
+      <rect class="box file" x="800" y="330" width="140" height="76" rx="6"/>
+      <text x="812" y="352" class="head">keybinds</text>
+      <text x="812" y="370" class="lbl">CLI, menu</text>
+      <text x="812" y="386" class="lbl">omarchy-shell</text>
+      <path class="edge acc" d="M800 368 L760 368" marker-end="url(#arr-acc)"/>
+      <text x="800" y="430" class="lbl">IPC: summon, toggle,</text>
+      <text x="800" y="446" class="lbl">call, rescanPlugins</text>
+    </svg>
+    </div>
+    <figcaption>Both plugin directories are scanned the same way. Only the enable rule differs: built-ins are on unless listed in <code>disabledPlugins[]</code>, third-party plugins are on only when an entry names them. Third-party ids can never claim the <code>omarchy.*</code> namespace.</figcaption>
+  </figure>
+
+  <h2 id="manifest">2 · What a plugin is</h2>
+  <p>A directory with a <code>manifest.json</code> plus the QML it points at. Every declared kind needs a matching entry point, and every entry point must be a relative path that exists inside the folder.</p>
+<pre><code>{
+  "schemaVersion": 1,
+  "id": "jds.hello",
+  "name": "Hello",
+  "version": "0.1.0",
+  "kinds": ["bar-widget"],
+  "entryPoints": { "barWidget": "Widget.qml" },
+  "barWidget": {
+    "displayName": "Hello", "category": "Info",
+    "allowMultiple": true, "defaultSection": "right"
+  }
+}</code></pre>
+
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>kind</th><th>entryPoints key</th><th>what it is</th><th>loaded when</th><th>root item exposes</th></tr></thead>
+    <tbody>
+      <tr><td><code>bar-widget</code></td><td><code>barWidget</code></td><td>Component the active bar drops into a section</td><td>present in <code>bar.layout</code></td><td>extends <code>BarWidget</code>; <code>open/close/opened</code> if it owns a popup</td></tr>
+      <tr><td><code>bar</code></td><td><code>bar</code></td><td>A full bar replacing <code>omarchy.bar</code></td><td>startup, if <code>bar.id</code> selects it</td><td>receives <code>barConfig</code></td></tr>
+      <tr><td><code>panel</code></td><td><code>panel</code></td><td>Floating window (OSD, dev gallery)</td><td>on summon</td><td><code>open(payloadJson)</code>, <code>close()</code>, <code>opened</code></td></tr>
+      <tr><td><code>overlay</code></td><td><code>overlay</code></td><td>Fullscreen surface (emojis, clipboard, image picker)</td><td>on summon</td><td>same as panel</td></tr>
+      <tr><td><code>menu</code></td><td><code>menu</code></td><td>Summoned menu (the Omarchy menu)</td><td>on summon</td><td>same as panel</td></tr>
+      <tr><td><code>service</code></td><td><code>service</code></td><td>Headless singleton, no UI</td><td>startup, if enabled</td><td>plain <code>Item</code> with <code>shell</code>, <code>manifest</code></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>A plugin may be several kinds at once. <code>omarchy.media</code> is a service plus a bar widget; <code>omarchy.menu</code> is a menu plus a bar widget. <code>keepLoaded: true</code> keeps a summoned surface mounted between uses.</p>
+
+  <h3>The bar widget contract</h3>
+  <p>Extend <code>BarWidget</code> from <code>qs.Ui</code>. The bar injects <code>bar</code> (colors, font, orientation, <code>run()</code>, tooltips, popout coordination), <code>moduleName</code>, and <code>settings</code>, which is literally your inline entry from <code>shell.json</code>. <code>setting("format", "HH:mm")</code> reads one field with a fallback. A widget persists a change by calling <code>shell.updateEntryInline(id, entry)</code>, which is how a right-click on the clock makes the new format stick across restarts.</p>
+
+  <h2 id="lifecycle">3 · From git URL to running code</h2>
+  <p>Distribution is just git. <code>omarchy plugin add &lt;url&gt;</code> does the following, in this order, and every gate that fails deletes the staging clone and stops. Nothing from the plugin is executed during install: no hooks, no sudo, only files, a manifest check, and one IPC bit-flip.</p>
+
+  <figure>
+    <div class="figwrap">
+    <svg viewBox="0 0 960 370" role="img" aria-label="The add command passes a URL through a URL check, a consent prompt, a git clone into a hidden staging directory, manifest validation and an id collision check before moving the folder into the plugins directory, rescanning the shell, and optionally enabling it, at which point the shell loads the entry point.">
+      <defs>
+        <marker id="a2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
+        </marker>
+        <marker id="a2-bad" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="var(--danger)"/>
+        </marker>
+      </defs>
+
+      <!-- row 1 -->
+      <rect class="box file" x="20" y="30" width="200" height="54" rx="6"/>
+      <text x="32" y="51" class="head">git URL</text>
+      <text x="32" y="70" class="lbl">acme/omarchy-x.git</text>
+
+      <path class="edge" d="M220 57 L250 57" marker-end="url(#a2)"/>
+      <rect class="gate" x="250" y="30" width="200" height="54" rx="27"/>
+      <text x="350" y="52" text-anchor="middle">url-check</text>
+      <text x="350" y="70" text-anchor="middle" class="lbl">refuses git options</text>
+
+      <path class="edge" d="M450 57 L480 57" marker-end="url(#a2)"/>
+      <rect class="gate" x="480" y="30" width="200" height="54" rx="27"/>
+      <text x="580" y="52" text-anchor="middle">warn + confirm</text>
+      <text x="580" y="70" text-anchor="middle" class="lbl">unsandboxed code!</text>
+
+      <path class="edge" d="M680 57 L710 57" marker-end="url(#a2)"/>
+      <rect class="box" x="710" y="30" width="200" height="54" rx="6"/>
+      <text x="722" y="51" class="head">git clone</text>
+      <text x="722" y="70" class="lbl">into plugins/.add.tmp.$$</text>
+
+      <!-- row 1 -> row 2 -->
+      <path class="edge" d="M810 84 L810 128 L120 128 L120 150" marker-end="url(#a2)"/>
+
+      <!-- row 2 -->
+      <rect class="gate" x="20" y="150" width="200" height="54" rx="27"/>
+      <text x="120" y="172" text-anchor="middle">validate</text>
+      <text x="120" y="190" text-anchor="middle" class="lbl">schema, paths, symlinks</text>
+
+      <path class="edge" d="M220 177 L250 177" marker-end="url(#a2)"/>
+      <rect class="gate" x="250" y="150" width="200" height="54" rx="27"/>
+      <text x="350" y="172" text-anchor="middle">id is free?</text>
+      <text x="350" y="190" text-anchor="middle" class="lbl">no clash, not omarchy.*</text>
+
+      <path class="edge" d="M450 177 L480 177" marker-end="url(#a2)"/>
+      <rect class="box tp" x="480" y="150" width="200" height="54" rx="6"/>
+      <text x="492" y="171" class="head">mv to plugins/&lt;id&gt;/</text>
+      <text x="492" y="190" class="lbl">now a plain git checkout</text>
+
+      <path class="edge" d="M680 177 L710 177" marker-end="url(#a2)"/>
+      <rect class="box" x="710" y="150" width="200" height="54" rx="6"/>
+      <text x="722" y="171" class="head">rescanPlugins</text>
+      <text x="722" y="190" class="lbl">IPC, registry re-walks</text>
+
+      <!-- row 2 -> row 3 -->
+      <path class="edge" d="M810 204 L810 238 L120 238 L120 260" marker-end="url(#a2)"/>
+
+      <!-- row 3 -->
+      <rect class="gate" x="20" y="260" width="200" height="54" rx="27"/>
+      <text x="120" y="282" text-anchor="middle">enable?</text>
+      <text x="120" y="300" text-anchor="middle" class="lbl">--enable, or a prompt</text>
+
+      <path class="edge" d="M220 287 L250 287" marker-end="url(#a2)"/>
+      <rect class="box file" x="250" y="260" width="200" height="54" rx="6"/>
+      <text x="262" y="281" class="head">shell.json entry</text>
+      <text x="262" y="300" class="lbl">bar.layout or plugins[]</text>
+
+      <path class="edge" d="M450 287 L480 287" marker-end="url(#a2)"/>
+      <rect class="box fp" x="480" y="260" width="200" height="54" rx="6"/>
+      <text x="492" y="281" class="head">shell loads entryPoint</text>
+      <text x="492" y="300" class="lbl">injects props, plugin runs</text>
+
+      <!-- failure exits -->
+      <path class="edge bad" d="M350 84 L350 104" marker-end="url(#a2-bad)"/>
+      <text x="350" y="118" class="bad-t" text-anchor="middle">refuse</text>
+      <path class="edge bad" d="M580 84 L580 104" marker-end="url(#a2-bad)"/>
+      <text x="580" y="118" class="bad-t" text-anchor="middle">abort</text>
+      <path class="edge bad" d="M120 204 L120 214" marker-end="url(#a2-bad)"/>
+      <text x="120" y="228" class="bad-t" text-anchor="middle">rm -rf stage</text>
+      <path class="edge bad" d="M350 204 L350 214" marker-end="url(#a2-bad)"/>
+      <text x="350" y="228" class="bad-t" text-anchor="middle">rm -rf stage</text>
+      <path class="edge bad" d="M120 314 L120 334" marker-end="url(#a2-bad)"/>
+      <text x="120" y="350" class="bad-t" text-anchor="start" dx="-100">no: enable later with omarchy plugin enable &lt;id&gt;</text>
+    </svg>
+    </div>
+    <figcaption>Every gate before the move deletes the staging clone on failure. Once the folder is in place, saving any file under it triggers a hot reload through the inotify watcher, so the same folder is also the development loop.</figcaption>
+  </figure>
+
+  <h3>Update, clone, remove</h3>
+  <ul>
+    <li><strong>update</strong> is <code>git fetch</code>, a diff shown before anything changes, then <code>merge --ff-only</code>. Local edits block it. If the new revision fails validation it resets to <code>ORIG_HEAD</code>.</li>
+    <li><strong>clone</strong> copies a built-in into <code>~/.config/omarchy/plugins/&lt;username&gt;.&lt;name&gt;/</code>, rewrites the id, names it "My Clock", enables it, and routes calls made to the built-in id to your clone. Removing the clone restores the built-in.</li>
+    <li><strong>remove</strong> disables first, then deletes a git checkout, unlinks a symlink, or moves a hand-made folder to a timestamped backup.</li>
+  </ul>
+
+  <h2 id="state">4 · Where "enabled" lives</h2>
+  <p>There is one persisted file, <code>~/.config/omarchy/shell.json</code>. It records the deviation from the shipped defaults, and once it exists it is canonical: no deep-merge with defaults. Four rules decide whether a plugin is on.</p>
+
+  <div class="rules">
+    <div class="rule"><div class="k">Full bar <span class="tag fp">1p</span><span class="tag tp">3p</span></div><p><code>bar.id</code> names the active bar. Missing or <code>omarchy.bar</code> means built-in. There is no off state; you replace a bar by enabling another.</p></div>
+    <div class="rule"><div class="k">Bar widget <span class="tag fp">1p</span><span class="tag tp">3p</span></div><p>On when an entry with its id sits in <code>bar.layout.left|center|right</code>. Settings are inline on that entry. <code>allowMultiple</code> permits several entries.</p></div>
+    <div class="rule"><div class="k">Third-party, non-widget <span class="tag tp">3p</span></div><p>On when listed in <code>plugins[]</code>. Presence is the switch.</p></div>
+    <div class="rule"><div class="k">First-party, non-widget <span class="tag fp">1p</span></div><p>On by default. Off only when listed in <code>disabledPlugins[]</code>, so a stock file with an empty <code>plugins[]</code> still summons the emoji picker.</p></div>
+  </div>
+
+<pre><code>{
+  "version": 1,
+  "bar": {
+    "id": "omarchy.bar",
+    "layout": {
+      "left":   [ { "id": "omarchy.menu" }, { "id": "omarchy.workspaces" } ],
+      "center": [],
+      "right":  [ { "id": "omarchy.clock", "format": "h:mm AP" }, { "id": "jds.hello", "greeting": "yo" } ]
+    }
+  },
+  "plugins": [ { "id": "acme.weather-extra" } ],
+  "disabledPlugins": [ "omarchy.nightlight" ]
+}</code></pre>
+
+  <h2 id="ipc">5 · Talking to plugins</h2>
+  <p>The shell exposes one IPC target, <code>shell</code>, and the wrapper <code>omarchy-shell</code> forwards to it. This is also how the stock keybindings work: <code>SUPER+CTRL+E</code> runs <code>omarchy-shell shell toggle omarchy.emojis</code>.</p>
+<pre><code>omarchy-shell shell listPlugins
+omarchy-shell shell rescanPlugins
+omarchy-shell shell summon omarchy.emojis '{}'
+omarchy-shell shell toggle omarchy.clock  '{}'
+omarchy-shell shell call   &lt;id&gt; &lt;method&gt; &lt;arg&gt;
+omarchy-shell shell setPluginEnabled &lt;id&gt; "true"   # only the literal string "true" enables</code></pre>
+  <p>Calls aimed at a built-in id are rerouted to an enabled clone, so keybindings and scripts keep working after <code>omarchy plugin clone</code>.</p>
+
+  <h2 id="cli">6 · CLI cheat sheet</h2>
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>command</th><th>does</th></tr></thead>
+    <tbody>
+      <tr><td><code>omarchy plugin list [--json]</code></td><td>id, enabled, 1p/3p, kinds, name for every discovered plugin</td></tr>
+      <tr><td><code>omarchy plugin enable &lt;id&gt; [--section right] [--index n]</code></td><td>switch on, placing a widget on the bar</td></tr>
+      <tr><td><code>omarchy plugin disable &lt;id&gt;</code></td><td>remove from layout, or add to <code>disabledPlugins[]</code></td></tr>
+      <tr><td><code>omarchy plugin add &lt;git-url&gt; [--enable] [--yes]</code></td><td>the flow in section 3</td></tr>
+      <tr><td><code>omarchy plugin update [&lt;id&gt;] [--yes]</code></td><td>diff, then fast-forward; no id updates all</td></tr>
+      <tr><td><code>omarchy plugin clone &lt;omarchy.id&gt; [--edit]</code></td><td>copy a built-in into your plugins dir and switch to it</td></tr>
+      <tr><td><code>omarchy plugin remove &lt;id&gt;</code></td><td>disable, then delete / unlink / back up</td></tr>
+      <tr><td><code>omarchy plugin validate &lt;dir&gt;</code></td><td>the same checks the shell runs at load</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>The same actions live in the menu under <strong>Setup › Plugins</strong>. Lighter than a plugin: an inline <code>type: "command"</code> or <code>type: "qml"</code> module in <code>bar.layout</code>, a hook script in <code>~/.config/omarchy/hooks/&lt;event&gt;.d/</code>, or a row in <code>extensions/omarchy-menu.jsonc</code>.</p>
+
+  <div class="warn">
+    <p><strong>No sandbox.</strong> A plugin is QML and JavaScript running inside the process that draws your bar, holds your lock screen and runs your polkit agent, with your full user privileges for the life of the session. The protections are all at install time: reserved namespace, path and symlink checks, diff-before-update, and nothing enabled until you say so. Read the code before you enable it.</p>
+  </div>
+
+  <p class="src">Sources: <code>manual/32-shell-plugins.md</code>, <code>docs/omarchy-shell.md</code>, <code>shell/README.md</code>, <code>shell/plugins/README.md</code>, <code>shell/services/PluginRegistry.qml</code>, <code>shell/shell.qml</code>, <code>shell/Ui/BarWidget.qml</code>, <code>bin/omarchy-plugin-*</code>. Full write-up with the same structure lives in <code>README.md</code> beside this file.</p>
+</div>
+
+</body></html>
