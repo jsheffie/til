@@ -21,4 +21,7 @@ http://jds.local.me:8000/api/ -method:OPTIONS
 
 
 ## Chrome inverted filter's that I use to squash noise.
-google-analytics && identity && ingest && googleapi
+gtag/js && react-refresh && vite/client && materialiconsoutlined && g/collect && src && node_modules && google-analytics && identity && ingest && googleapi
+
+huvr
+-node_modules -url:https://fonts.googleapis.com -url:https://analytics.google.com -url:https://fonts.googleapis.com -url:https://fonts.gstatic.com -url:https://identitytoolkit.googleapis.com -url:src/store -url:src/route  -url:src/theme  -url:src/utilities -url:src/hooks -url:src/config -url:src/components -url:https://maps.googleapis.com -url:https://o269624.ingest.sentry.io

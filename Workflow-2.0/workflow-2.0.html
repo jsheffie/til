@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Workflow 2.0: Terminal-only Code Review</title>
+<style>
+  :root {
+    --bg: #fbfbfc;
+    --fg: #1a1a1a;
+    --muted: #6b6b70;
+    --border: #dcdce0;
+    --card: #ffffff;
+    --head-bg: #f1f1f4;
+    --row-alt: #f8f8fa;
+    --link: #0a58ca;
+    --code-bg: #f1f1f4;
+    --code-border: #e0e0e4;
+    --accent: #0f7b3d;
+    --accent-bg: #eaf5ee;
+    --warn: #b8860b;
+    --warn-bg: #fff8e6;
+    --phase-bg: #e8eefc;
+    --phase-fg: #1d3f8f;
+    --phase-border: #b9c9f2;
+    --current-bg: #eaf5ee;
+    --current-fg: #0f5a2d;
+    --try-bg: #f3eefc;
+    --try-fg: #4b2e8a;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #141518;
+      --fg: #e9e9ea;
+      --muted: #9b9ba1;
+      --border: #303236;
+      --card: #1c1d21;
+      --head-bg: #222428;
+      --row-alt: #1f2024;
+      --link: #78aeff;
+      --code-bg: #24262a;
+      --code-border: #34363b;
+      --accent: #4cb36f;
+      --accent-bg: #16261c;
+      --warn: #e0b64a;
+      --warn-bg: #2a2417;
+      --phase-bg: #1b2440;
+      --phase-fg: #a9bff5;
+      --phase-border: #2e3d6b;
+      --current-bg: #16261c;
+      --current-fg: #8fd6a8;
+      --try-bg: #241c38;
+      --try-fg: #c7b3f0;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    padding: 0 16px 4rem;
+    background: var(--bg);
+    color: var(--fg);
+    font: 15px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  }
+  main { max-width: 1180px; margin: 0 auto; }
+  a { color: var(--link); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  code, kbd {
+    font: 0.9em/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 4px;
+    padding: 0.05em 0.35em;
+    white-space: nowrap;
+  }
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 8px;
+    padding: 0.9rem 1.1rem;
+    overflow-x: auto;
+    margin: 0;
+  }
+  pre code { background: none; border: 0; padding: 0; white-space: pre; }
+
+  header { padding: 3rem 0 1.5rem; }
+  header h1 { margin: 0 0 0.4rem; font-size: 2rem; letter-spacing: -0.01em; }
+  header p.lede { margin: 0; color: var(--muted); font-size: 1.05rem; max-width: 60ch; }
+  header .meta { margin-top: 0.75rem; color: var(--muted); font-size: 0.85rem; }
+
+  nav.toc {
+    display: flex; flex-wrap: wrap; gap: 0.4rem 0.9rem;
+    font-size: 0.9rem; margin-bottom: 2rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border); border-radius: 8px; background: var(--card);
+  }
+  nav.toc a { color: var(--fg); opacity: 0.85; }
+  nav.toc a:hover { opacity: 1; }
+
+  section { margin: 2.5rem 0; }
+  h2 {
+    font-size: 1.35rem; margin: 0 0 0.35rem;
+    padding-bottom: 0.35rem; border-bottom: 1px solid var(--border);
+  }
+  h3 { font-size: 1.05rem; margin: 1.6rem 0 0.5rem; }
+  p.sub { margin: 0 0 1rem; color: var(--muted); }
+
+  /* Phase strip */
+  .phases {
+    display: flex; flex-wrap: wrap; align-items: stretch; gap: 0.5rem;
+    margin: 1.25rem 0 1.5rem; padding: 0; list-style: none;
+  }
+  .phases li {
+    flex: 1 1 130px; position: relative;
+    background: var(--phase-bg); color: var(--phase-fg);
+    border: 1px solid var(--phase-border); border-radius: 8px;
+    padding: 0.6rem 0.8rem;
+  }
+  .phases li .n { display: block; font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.75; }
+  .phases li .name { display: block; font-weight: 600; font-size: 1rem; }
+  .phases li .done { display: block; font-size: 0.8rem; opacity: 0.85; margin-top: 0.15rem; color: var(--fg); }
+  .phases li.layer { background: var(--head-bg); color: var(--fg); border-color: var(--border); }
+  .phases li.layer .n { opacity: 0.6; }
+  .loop { color: var(--muted); font-size: 0.9rem; margin: -0.5rem 0 0; }
+
+  /* Tables */
+  .tablewrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 8px; background: var(--card); }
+  table { border-collapse: collapse; width: 100%; font-size: 0.92rem; }
+  th, td { text-align: left; vertical-align: top; padding: 0.6rem 0.8rem; border-bottom: 1px solid var(--border); }
+  th { background: var(--head-bg); font-weight: 600; white-space: nowrap; }
+  tbody tr:nth-child(even) td { background: var(--row-alt); }
+  tbody tr:last-child td { border-bottom: 0; }
+  td.num { color: var(--muted); font-variant-numeric: tabular-nums; width: 2.5rem; }
+  td.phase { white-space: nowrap; font-weight: 600; }
+  td.tool { white-space: nowrap; }
+
+  .tag {
+    display: inline-block; font-size: 0.72rem; font-weight: 600;
+    padding: 0.05rem 0.45rem; border-radius: 999px; vertical-align: middle;
+    letter-spacing: 0.02em;
+  }
+  .tag.current { background: var(--current-bg); color: var(--current-fg); }
+  .tag.try { background: var(--try-bg); color: var(--try-fg); }
+
+  /* Flow line */
+  .flowline {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem;
+    font: 0.9rem/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    margin: 1rem 0 0;
+  }
+  .flowline span { background: var(--code-bg); border: 1px solid var(--code-border); border-radius: 6px; padding: 0.25rem 0.6rem; }
+  .flowline i { color: var(--muted); font-style: normal; }
+
+  /* Callouts */
+  .note {
+    border-left: 4px solid var(--warn); background: var(--warn-bg);
+    padding: 0.7rem 1rem; border-radius: 0 8px 8px 0; margin: 1rem 0;
+    font-size: 0.92rem;
+  }
+  .pick {
+    border-left: 4px solid var(--accent); background: var(--accent-bg);
+    padding: 0.7rem 1rem; border-radius: 0 8px 8px 0; margin: 1rem 0;
+    font-size: 0.92rem;
+  }
+
+  /* Cards for tool groups */
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1rem; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1rem 1.1rem; }
+  .card h3 { margin: 0 0 0.25rem; }
+  .card p.sub { font-size: 0.88rem; margin-bottom: 0.6rem; }
+  .card dl { margin: 0; }
+  .card dt { font-weight: 600; margin-top: 0.55rem; }
+  .card dt:first-child { margin-top: 0; }
+  .card dd { margin: 0.1rem 0 0; color: var(--fg); font-size: 0.9rem; }
+  .card dd .muted { color: var(--muted); }
+
+  ul.q { padding-left: 1.2rem; }
+  ul.q li { margin: 0.4rem 0; }
+  ul.refs { padding-left: 1.2rem; font-size: 0.92rem; }
+  ul.refs li { margin: 0.3rem 0; }
+
+  footer { margin-top: 3rem; color: var(--muted); font-size: 0.85rem; border-top: 1px solid var(--border); padding-top: 1rem; }
+</style>
+</head>
+<body>
+<main>
+
+<header>
+  <h1>Workflow 2.0: terminal-only code review</h1>
+  <p class="lede">Do the whole code review loop without leaving the terminal emulator. The phases are tool-agnostic on purpose; tools get swapped in and out until the flow feels right.</p>
+  <div class="meta">Companion to <a href="README.md">README.md</a> in this directory. Last updated 2026-10-01.</div>
+</header>
+
+<nav class="toc">
+  <a href="#phases">Phases</a>
+  <a href="#current">Current tooling</a>
+  <a href="#try">Things to try</a>
+  <a href="#flows">Candidate flows</a>
+  <a href="#questions">Open questions</a>
+  <a href="#refs">References</a>
+</nav>
+
+<section id="phases">
+  <h2>Phases</h2>
+  <p class="sub">Each phase has a clear exit condition so I can tell which tool is doing which job.</p>
+
+  <ol class="phases">
+    <li class="layer"><span class="n">0 · layer</span><span class="name">Workspace</span><span class="done">A pane exists for the repo</span></li>
+    <li><span class="n">1</span><span class="name">Triage</span><span class="done">I have chosen a PR</span></li>
+    <li><span class="n">2</span><span class="name">Fetch</span><span class="done">Branch checked out or in a worktree</span></li>
+    <li><span class="n">3</span><span class="name">Diff</span><span class="done">I know what changed</span></li>
+    <li><span class="n">4</span><span class="name">Explore</span><span class="done">I know why it changed</span></li>
+    <li><span class="n">5</span><span class="name">Review</span><span class="done">Review submitted</span></li>
+    <li><span class="n">6</span><span class="name">Follow up</span><span class="done">PR merged or closed, branch gone</span></li>
+  </ol>
+  <p class="loop">Diff and Explore loop with each other. Review and Follow up loop until merge.</p>
+
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>#</th><th>Phase</th><th>What happens here</th><th>Done when</th></tr></thead>
+    <tbody>
+      <tr><td class="num">0</td><td class="phase">Workspace</td><td>The layer everything runs in: terminal emulator plus a multiplexer that holds a pane per repo or task and survives detach. Not really a step, it is always there.</td><td>A pane exists for the repo I am reviewing</td></tr>
+      <tr><td class="num">1</td><td class="phase">Triage</td><td>See what needs my attention: PRs assigned to me, review requests, CI status, notifications. Pick one.</td><td>I have chosen a PR</td></tr>
+      <tr><td class="num">2</td><td class="phase">Fetch</td><td>Get the PR branch onto my machine so local tools can see it.</td><td>PR branch is checked out, or a worktree exists for it</td></tr>
+      <tr><td class="num">3</td><td class="phase">Diff</td><td>Read the change itself: changed files, hunks, commits.</td><td>I understand what changed</td></tr>
+      <tr><td class="num">4</td><td class="phase">Explore</td><td>Leave the diff and read the surrounding code on the PR branch: callers, tests, history, blame. Run tests if needed.</td><td>I understand why it changed and what it touches</td></tr>
+      <tr><td class="num">5</td><td class="phase">Review</td><td>Leave line comments and suggestions, write the summary, approve / request changes / comment.</td><td>Review is submitted on GitHub</td></tr>
+      <tr><td class="num">6</td><td class="phase">Follow up</td><td>Watch for replies, re-review after new pushes, merge, clean up the local branch.</td><td>PR is merged or closed and the branch is gone locally</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section id="current">
+  <h2>Current tooling</h2>
+  <p class="sub">What I use today, phase by phase.</p>
+
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>#</th><th>Phase</th><th>Tool</th><th>How I use it</th><th>Notes / gaps</th></tr></thead>
+    <tbody>
+      <tr><td class="num">0</td><td class="phase">Workspace</td><td class="tool">terminal emulator: <em>TBD</em></td><td></td><td>Fill in once I settle on one</td></tr>
+      <tr><td class="num">0</td><td class="phase">Workspace</td><td class="tool"><a href="../terminal-multiplexers/herdr/">herdr</a></td><td>One workspace per repo, panes for shell, agent, editor</td><td>Agent-aware sidebar, <kbd>prefix</kbd> <kbd>?</kbd> for keys</td></tr>
+      <tr><td class="num">1</td><td class="phase">Triage</td><td class="tool"><a href="https://github.com/dlvhdr/gh-dash">gh dash</a></td><td>List PRs and issues across repos, filter to "needs my review"</td><td>Also <code>gh pr list</code>, <code>gh pr status</code></td></tr>
+      <tr><td class="num">2</td><td class="phase">Fetch</td><td class="tool">gh dash keybind, or <code>gh pr checkout &lt;n&gt;</code></td><td>Check the PR branch out locally</td><td>Try <code>git worktree</code> so main stays untouched</td></tr>
+      <tr><td class="num">2</td><td class="phase">Fetch</td><td class="tool"><a href="https://github.com/jesseduffield/lazygit">lazygit</a></td><td>Checkout a remote branch or create a worktree from the branches panel</td><td>Local git only, knows nothing about PRs</td></tr>
+      <tr><td class="num">3</td><td class="phase">Diff</td><td class="tool"><a href="../neovim/octo-nvim.md">octo.nvim</a> <code>:Octo review start</code></td><td>Changed-files panel plus two-way diff inside Neovim</td><td>Can only comment on lines inside a hunk</td></tr>
+      <tr><td class="num">4</td><td class="phase">Explore</td><td class="tool">Neovim on the checked-out branch</td><td>Telescope, LSP go-to-definition, gitsigns</td><td>Blame and history: see <a href="../neovim/neovim-GitLense-options.md">neovim-GitLense-options.md</a></td></tr>
+      <tr><td class="num">4</td><td class="phase">Explore</td><td class="tool">lazygit</td><td>Commit history, per-commit diffs, file history, interactive rebase when fixing the branch myself</td><td>Run in a herdr pane, or float it in Neovim with lazygit.nvim / snacks.nvim <code>lazygit</code></td></tr>
+      <tr><td class="num">5</td><td class="phase">Review</td><td class="tool">octo.nvim</td><td><kbd>Space c a</kbd> line comment, <kbd>Space s a</kbd> suggestion, <code>:Octo review submit</code></td><td><kbd>Ctrl-a</kbd> approve, <kbd>Ctrl-r</kbd> request changes</td></tr>
+      <tr><td class="num">6</td><td class="phase">Follow up</td><td class="tool">gh dash, <code>gh pr checks</code>, <code>gh pr merge</code></td><td>Watch CI, re-review, merge</td><td>Notifications: nothing terminal-side yet</td></tr>
+      <tr><td class="num">6</td><td class="phase">Follow up</td><td class="tool">lazygit</td><td>Delete merged local branches, prune worktrees, pull after merge</td><td></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="note">lazygit is a local git cockpit, not a GitHub client. It never replaces gh dash (Triage) or octo (Review); it sits beside them in Fetch, Explore and Follow up.</div>
+
+  <h3>Current path, end to end</h3>
+  <div class="flowline">
+    <span>herdr</span><i>→</i>
+    <span>gh dash</span><i>→</i>
+    <span>gh pr checkout</span><i>→</i>
+    <span>nvim + Octo review</span><i>→</i>
+    <span>Octo review submit</span><i>→</i>
+    <span>gh dash</span>
+  </div>
+</section>
+
+<section id="try">
+  <h2>Things to try</h2>
+  <p class="sub">Alternatives per phase, so swapping is a one-row change in the table above.</p>
+
+  <div class="note">Most of these tool names come from a Grok conversation (see <a href="#refs">References</a>) and are not verified yet. Check each repo before installing.</div>
+
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>Phase</th><th>Alternatives</th></tr></thead>
+    <tbody>
+      <tr><td class="phase">Triage</td><td><code>gh</code> CLI aliases, <a href="https://github.com/meiji163/gh-notify">gh-notify</a> for notifications, octo.nvim <code>:Octo pr list</code> or snacks.nvim picker (skip gh dash entirely), or one of the dashboard TUIs below</td></tr>
+      <tr><td class="phase">Fetch</td><td><code>git worktree add</code> per PR, <code>gh pr checkout</code> from inside octo (<code>:Octo pr checkout</code>), lazygit branches panel</td></tr>
+      <tr><td class="phase">Diff</td><td><a href="https://github.com/sindrets/diffview.nvim">diffview.nvim</a> <code>:DiffviewOpen main...HEAD</code>, <a href="https://github.com/dandavison/delta">delta</a> in the shell, lazygit diff view, <code>gh pr diff</code>, gitsigns <code>change_base</code> to the PR target branch</td></tr>
+      <tr><td class="phase">Explore</td><td>neogit or lazygit for history, gitsigns <code>current_line_blame</code> for inline blame</td></tr>
+      <tr><td class="phase">Review</td><td><code>gh pr review --approve / --request-changes / --comment</code> for quick ones with no line comments, or one of the review TUIs / Neovim reviewers below</td></tr>
+      <tr><td class="phase">Follow up</td><td><code>gh pr checks --watch</code>, <code>gh pr merge --squash --delete-branch</code>, herdr notifications, prtop</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="grid" style="margin-top:1.25rem">
+    <div class="card">
+      <h3>Triage: dashboard TUIs</h3>
+      <p class="sub">gh dash alternatives</p>
+      <dl>
+        <dt>gh dash <span class="tag current">current</span></dt><dd>Configurable sections, gh extension.</dd>
+        <dt>ghdash</dt><dd>Rust/ratatui. Orgs, all open PRs, review inbox, search, auto-refresh. <span class="muted">More "inbox across repos" than configurable sections.</span></dd>
+        <dt>prtop</dt><dd>Small live monitor of PRs I author or review, with notifications. <span class="muted">Also a Follow up candidate.</span></dd>
+        <dt>gitpane</dt><dd>Multi-repo workspace TUI, local status plus PRs/issues. <span class="muted">Complements lazygit.</span></dd>
+        <dt>github-pr-attention</dt><dd>Focused "PRs that need me" inbox. Comment, approve, request changes, squash merge from the list.</dd>
+      </dl>
+    </div>
+
+    <div class="card">
+      <h3>Review: standalone TUIs</h3>
+      <p class="sub">Do Diff and Review in one tool, outside Neovim, no checkout needed</p>
+      <dl>
+        <dt>gh-prism <span class="tag try">try first</span></dt><dd>gh extension. Description, commits, files, conversation, highlighted diffs, inline comments and suggestions, submit, merge.<br><code>gh extension install kawarimidoll/gh-prism</code> then <code>gh prism 123</code></dd>
+        <dt>tuicr</dt><dd>Vim motions, GitHub-style continuous diff, line and range comments, submits to GitHub or GitLab. <span class="muted">Also works on local diffs.</span></dd>
+        <dt>prtui</dt><dd>Modal, vim-ish, GitHub PRs and GitLab MRs. <span class="muted">Can review local uncommitted diffs.</span></dd>
+        <dt>prr</dt><dd>Writes the PR to a review file I edit in Neovim, then submits. <span class="muted">Pairs well with worktrees.</span></dd>
+      </dl>
+    </div>
+
+    <div class="card">
+      <h3>Review: Neovim plugins</h3>
+      <p class="sub">octo.nvim alternatives</p>
+      <dl>
+        <dt><a href="../neovim/octo-nvim.md">octo.nvim</a> <span class="tag current">current</span></dt><dd>Kitchen sink: issues, PRs, discussions, actions.</dd>
+        <dt>gh-review.nvim <span class="tag try">try</span></dt><dd>Review only: side-by-side diffs, threads, suggestions, submit. Designed to sit next to gh dash, listing is a non-goal. <span class="muted">Most direct "keep dash, better reviewer than octo" swap.</span></dd>
+        <dt>ghlite.nvim</dt><dd>Lighter octo-ish review, can review without checkout.</dd>
+        <dt>github-pr-reviewer.nvim</dt><dd>Review in real buffers so LSP and <code>gd</code> keep working. <span class="muted">Covers the Explore gap.</span></dd>
+        <dt>gh.nvim</dt><dd>Older full review UI built on litee.nvim.</dd>
+        <dt>snacks.nvim</dt><dd>Picker for open PRs and issues, not a review UI. <span class="muted">Triage only.</span></dd>
+        <dt>diffview.nvim + gitsigns</dt><dd>Not GitHub-aware. Checkout or worktree, set gitsigns base to the target branch, review as normal code, comment with something else.</dd>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<section id="flows">
+  <h2>Candidate flows</h2>
+  <p class="sub">Combos to trial, each a full pass through the phases.</p>
+
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>Flow</th><th>Triage</th><th>Fetch</th><th>Diff + Review</th><th>Explore</th><th>When it fits</th></tr></thead>
+    <tbody>
+      <tr><td class="phase">A. Current <span class="tag current">now</span></td><td>gh dash</td><td><code>gh pr checkout</code></td><td>octo.nvim</td><td>Neovim on branch</td><td>Baseline</td></tr>
+      <tr><td class="phase">B. Keep dash, swap reviewer</td><td>gh dash</td><td>none, or checkout</td><td>gh dash custom action opens <code>gh prism &lt;n&gt;</code> or <code>:GHReview</code> (gh-review.nvim)</td><td>Neovim on branch if checked out</td><td>Dash is fine, octo is the pain point</td></tr>
+      <tr><td class="phase">C. Stay in Neovim</td><td>snacks / telescope / <code>:Octo pr list</code></td><td><code>:Octo pr checkout</code></td><td>gh-review.nvim or ghlite</td><td>Same Neovim session</td><td>Two tools is one too many</td></tr>
+      <tr><td class="phase">D. Deep review in a worktree</td><td>gh dash</td><td>lazygit worktree, or <code>git worktree add</code></td><td>diffview + gitsigns <code>change_base</code>, comment with octo / gh-review / prr</td><td>Full LSP on the worktree, lazygit for history and rebase, can edit the branch</td><td>Big PRs, or when I will push fixes myself</td></tr>
+      <tr><td class="phase">E. AI first pass</td><td></td><td></td><td>Copilot code review, CodeRabbit, Graphite as a first set of comments</td><td></td><td>Layer on top of any of the above, not a replacement</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="pick">One claim to test early: Flow B hinges on gh dash supporting a custom action that opens <code>gh prism &lt;n&gt;</code>. Confirm that before building on it.</div>
+</section>
+
+<section id="questions">
+  <h2>Open questions</h2>
+  <ul class="q">
+    <li>Does gh dash or octo.nvim own triage? Having both is one step too many. Flow B keeps dash, Flow C drops it.</li>
+    <li>Worktree per PR vs checkout in place. Worktrees keep my main working tree clean but need a new herdr pane each time. Flow D.</li>
+    <li>What tells me a PR I reviewed got a new push, without opening a browser? prtop and gh-notify are the candidates.</li>
+    <li>Review TUIs (gh-prism, tuicr) skip Fetch entirely. Is losing Explore (no LSP, no <code>gd</code>) acceptable for small PRs?</li>
+  </ul>
+</section>
+
+<section id="refs">
+  <h2>References</h2>
+  <ul class="refs">
+    <li>Grok: <a href="https://grok.com/share/bGVnYWN5_3318b0bb-e326-43a0-840c-438449823b10">Neovim GitHub PR Review Tools</a> - source of the dashboard, review TUI, Neovim plugin and candidate flow lists (2026-10-01)</li>
+    <li>Grok: <a href="https://grok.com/share/bGVnYWN5_b3bdb707-58af-4ecb-a69f-4fd22e44d4f3">Neovim Git blame plugins</a> - feeds <a href="../neovim/neovim-GitLense-options.md">neovim-GitLense-options.md</a></li>
+    <li><a href="../neovim/octo-nvim.md">octo-nvim.md</a> - my octo.nvim setup and review keybinds</li>
+    <li><a href="../terminal-multiplexers/herdr/">herdr notes</a> - keybindings, config, agent guide</li>
+  </ul>
+</section>
+
+<footer>Source of truth is <a href="README.md">README.md</a>; this page mirrors it.</footer>
+
+</main>
+</body>
+</html>
